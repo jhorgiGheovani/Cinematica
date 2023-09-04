@@ -15,7 +15,7 @@ class MoviePagingAdapter:
     override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
         val data = getItem(position)
         if (data != null) {
-            holder.bind(data)
+            holder.bind(data.posterPath)
         }
     }
 
