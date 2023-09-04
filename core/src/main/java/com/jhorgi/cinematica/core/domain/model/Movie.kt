@@ -1,4 +1,17 @@
 package com.jhorgi.cinematica.core.domain.model
 
-class Movie {
-}
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class Movie(
+    val movieId: Int,
+    val title: String,
+    val overview: String,
+    val originalLanguage: String,
+    val originalTitle: String,
+    val video: Boolean,
+    val posterPath: String,
+    val backdropPath: String,
+    val releaseDate: String
+) : Parcelable

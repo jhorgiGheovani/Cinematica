@@ -10,7 +10,10 @@ apply from: '../shared_dependencies.gradle'
 android {
     namespace 'com.jhorgi.cinematica.core'
     compileSdk 33
-
+    buildFeatures {
+        buildConfig true
+        viewBinding = true
+    }
     defaultConfig {
         minSdk 24
         targetSdk 33
