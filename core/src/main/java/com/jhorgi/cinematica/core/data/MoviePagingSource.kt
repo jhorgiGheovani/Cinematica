@@ -2,7 +2,6 @@ package com.jhorgi.cinematica.core.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.jhorgi.cinematica.core.data.source.remote.NETWORK_PAGE_SIZE
 import com.jhorgi.cinematica.core.data.source.remote.network.ApiService
 import com.jhorgi.cinematica.core.domain.model.Movie
 import com.jhorgi.cinematica.core.utils.DataMapper
@@ -35,7 +34,7 @@ class MoviePagingSource(private val apiService: ApiService): PagingSource<Int, M
                 } else {
                     // By default, initial load size = 3 * NETWORK PAGE SIZE
                     // ensure we're not requesting duplicating items at the 2nd request
-                    page + (params.loadSize / NETWORK_PAGE_SIZE)
+                    page + 1
                 }
 
 

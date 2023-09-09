@@ -1,5 +1,6 @@
 package com.jhorgi.cinematica.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.jhorgi.cinematica.core.adapter.LoadingStateAdapter
 import com.jhorgi.cinematica.core.adapter.MoviePagingAdapter
 import com.jhorgi.cinematica.databinding.FragmentHomeBinding
+import com.jhorgi.cinematica.details.DetailsActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,7 +27,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -44,6 +46,13 @@ class HomeFragment : Fragment() {
                     moviePagingAdapter.retry()
                 }
             )
+
+            //click item
+            moviePagingAdapter.onItemClick = {selectedData ->
+                val intent = Intent(activity,DetailsActivity::class.java)
+                intent.putExtra(DetailsActivity.EXTRA_DATA, selectedData.movieId)
+                startActivity(intent)
+            }
 
 
             viewLifecycleOwner.lifecycleScope.launch {

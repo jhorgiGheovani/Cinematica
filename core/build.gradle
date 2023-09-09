@@ -60,6 +60,4 @@ dependencies {
     //Database Encrypted
     implementation "net.zetetic:android-database-sqlcipher:4.4.0"
 
-    //Coil
-    implementation("io.coil-kt:coil:2.4.0")
 }

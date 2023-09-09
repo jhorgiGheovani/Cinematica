@@ -2,6 +2,7 @@ package com.jhorgi.cinematica.di
 
 import com.jhorgi.cinematica.core.domain.usecase.MovieInteractor
 import com.jhorgi.cinematica.core.domain.usecase.MovieUseCase
+import com.jhorgi.cinematica.details.DetailsViewModel
 import com.jhorgi.cinematica.home.HomeViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -12,4 +13,5 @@ val useCaseModule = module {
 
 val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
+    viewModel { DetailsViewModel(get()) }
 }
