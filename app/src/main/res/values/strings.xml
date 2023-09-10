@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Cinematica</string>
     <string name="minutes_property">%s Minutes</string>
+
+    <string name="home_bottom_navigation_label">Home</string>
+    <string name="search_bottom_navigation_label">Search</string>
+    <string name="favorite_bottom_navigation_label">Favorite</string>
 </resources>

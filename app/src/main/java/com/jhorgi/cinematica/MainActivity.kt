@@ -2,8 +2,11 @@ package com.jhorgi.cinematica
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.jhorgi.cinematica.databinding.ActivityMainBinding
-import com.jhorgi.cinematica.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,15 +17,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val fragmentManager = supportFragmentManager
-        val homeFragment = HomeFragment()
-        val fragment = fragmentManager.findFragmentByTag(HomeFragment::class.java.simpleName)
+//        val navController = findNavController(R.id.nav_host_fragment_container)
 
-        if (fragment !is HomeFragment) {
-            fragmentManager
-                .beginTransaction()
-                .add(R.id.frame_container, homeFragment, HomeFragment::class.java.simpleName)
-                .commit()
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as  NavHostFragment
+        val navController = navHostFragment.navController
+
+        AppBarConfiguration.Builder(
+            R.id.navigation_home, R.id.navigation_search, R.id.navigation_favorite
+        ).build()
+
+        binding.bottomNav.setupWithNavController(navController)
+
     }
 }
