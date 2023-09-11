@@ -1,6 +1,7 @@
 package com.jhorgi.cinematica
 
 import android.app.Application
+import com.jhorgi.cinematica.core.di.databaseModule
 import com.jhorgi.cinematica.core.di.networkModule
 import com.jhorgi.cinematica.core.di.repositoryModule
 import com.jhorgi.cinematica.di.useCaseModule
@@ -20,6 +21,7 @@ class MyApplication : Application() {
 
             modules(
                 listOf(
+                    databaseModule,
                     networkModule,
                     repositoryModule,
                     useCaseModule,

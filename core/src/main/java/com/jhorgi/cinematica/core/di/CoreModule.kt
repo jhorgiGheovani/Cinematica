@@ -1,10 +1,15 @@
 package com.jhorgi.cinematica.core.di
 
+import androidx.room.Room
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jhorgi.cinematica.core.data.MovieRepository
+import com.jhorgi.cinematica.core.data.source.local.LocalDataSource
+import com.jhorgi.cinematica.core.data.source.local.room.MovieDatabase
 import com.jhorgi.cinematica.core.data.source.remote.RemoteDataSource
 import com.jhorgi.cinematica.core.data.source.remote.network.ApiService
 import com.jhorgi.cinematica.core.domain.repository.IMovieRepository
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -13,6 +18,20 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+
+val databaseModule = module {
+    factory { get<MovieDatabase>().movieDao() }
+    val passphrase: ByteArray = SQLiteDatabase.getBytes("CinematicaEncrytedPassword".toCharArray())
+    val factory = SupportFactory(passphrase)
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            MovieDatabase::class.java, "FavoriteMovies.db"
+        ).fallbackToDestructiveMigration()
+            .openHelperFactory(factory)
+            .build()
+    }
+}
 
 val networkModule = module {
 
@@ -53,7 +72,7 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-//    single { LocalDataSource(get()) }
+    single { LocalDataSource(get()) }
     single { RemoteDataSource(get()) }
-    single<IMovieRepository> { MovieRepository(get()) }
+    single<IMovieRepository> { MovieRepository(get(), get()) }
 }

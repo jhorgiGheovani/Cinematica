@@ -25,15 +25,22 @@ class DetailsActivity : AppCompatActivity() {
 
         val movieId = intent.getIntExtra(EXTRA_DATA, 0)
 
-        val layoutManagerCast = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
+        val layoutManagerCast = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.contentLayout.rvCast.layoutManager = layoutManagerCast
 
-        val layoutManagerCrew = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
+        val layoutManagerCrew = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.contentLayout.rvCrew.layoutManager = layoutManagerCrew
 
         detailMovieViewModel.getMovieCast(movieId)
         detailMovieViewModel.getMovieCrew(movieId)
         detailMovieViewModel.getMovieDetails(movieId)
+        detailMovieViewModel.isFavoriteMovie(movieId)
+
+        detailMovieViewModel.isFavoriteMovie.observe(this) {
+            if (it != true) {
+                binding.contentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
+            }
+        }
 
 
         detailMovieViewModel.castData.observe(this) { castData ->
@@ -60,28 +67,39 @@ class DetailsActivity : AppCompatActivity() {
             imageLoader.enqueue(request)
 
             //avatar poster
-                val avatarRequest = ImageRequest.Builder(this)
-                    .data("https://image.tmdb.org/t/p/w500/${movieDetails.posterPath}")
-                    .target {
-                        binding.contentLayout.poster.setImageDrawable(it)
-                    }
-                    .build()
-                imageLoader.enqueue(avatarRequest)
+            val avatarRequest = ImageRequest.Builder(this)
+                .data("https://image.tmdb.org/t/p/w500/${movieDetails.posterPath}")
+                .target {
+                    binding.contentLayout.poster.setImageDrawable(it)
+                }
+                .build()
+            imageLoader.enqueue(avatarRequest)
 
 
             binding.contentLayout.tittleTV.text = movieDetails.title
             binding.contentLayout.overViewContent.text = movieDetails.overview
             binding.contentLayout.years.text = movieDetails.releaseDate.split("-")[0]
-            binding.contentLayout.runTimeTV.text = getString(R.string.minutes_property,movieDetails.runtime.toString())
+            binding.contentLayout.runTimeTV.text =
+                getString(R.string.minutes_property, movieDetails.runtime.toString())
 
-            val genre = movieDetails.genres.map {it.name }
+            val genre = movieDetails.genres.map { it.name }
 
             binding.contentLayout.genres.text = genre.joinToString(", ")
 
+            //Add movie To Favorite
+            binding.contentLayout.favoriteButton.setOnClickListener {
+                val currentTimeMillis = System.currentTimeMillis()  //Time Stamp
+                //check favorite status by love button color
+                if (binding.contentLayout.favoriteButton.colorFilter == null) {
+                    detailMovieViewModel.deleteMovieFromFavorite(movieDetails.id)
+                    binding.contentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
+                } else {
+                    binding.contentLayout.favoriteButton.colorFilter = null
+                    detailMovieViewModel.addMovieToFavorite(movieDetails,currentTimeMillis)
+                }
+            }
 
         }
-
-
     }
 
     companion object {

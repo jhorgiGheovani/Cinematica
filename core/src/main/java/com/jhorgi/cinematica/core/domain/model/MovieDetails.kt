@@ -29,7 +29,3 @@ data class MovieDetails(
         val status: String
 ) : Parcelable
 
-@Parcelize
-data class GenresItem(
-        val name: String
-) : Parcelable

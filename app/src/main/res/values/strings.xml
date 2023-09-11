@@ -5,4 +5,10 @@
     <string name="home_bottom_navigation_label">Home</string>
     <string name="search_bottom_navigation_label">Search</string>
     <string name="favorite_bottom_navigation_label">Favorite</string>
+
+    <string name="content_desc_movie_poster">Movie Poster</string>
+    <string name="content_desc_favorite_button">Favorite Button</string>
+    <!-- For dev -->
+    <string name="short_text">Text</string>
+    <string name="long_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1more recent</string>
 </resources>
