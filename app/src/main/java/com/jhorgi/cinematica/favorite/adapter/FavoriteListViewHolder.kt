@@ -6,7 +6,8 @@ import com.jhorgi.cinematica.core.domain.model.FavoriteMovie
 import com.jhorgi.cinematica.databinding.ItemFavoriteMovieBinding
 
 class FavoriteListViewHolder(
-    private val binding: ItemFavoriteMovieBinding
+    private val binding: ItemFavoriteMovieBinding,
+    private val onItemClick: (FavoriteMovie) -> Unit
 ): RecyclerView.ViewHolder(binding.root)  {
 
     fun bind(data: FavoriteMovie){
@@ -21,5 +22,6 @@ class FavoriteListViewHolder(
         val genre = data.genres.map { it.name }
 
         binding.genres.text = genre.joinToString (", ")
+        itemView.setOnClickListener { onItemClick(data) }
     }
 }

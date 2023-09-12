@@ -1,13 +1,14 @@
 package com.jhorgi.cinematica.favorite
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jhorgi.cinematica.databinding.FragmentFavoriteBinding
+import com.jhorgi.cinematica.details.DetailsActivity
 import com.jhorgi.cinematica.favorite.adapter.FavoriteAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,10 +37,13 @@ class FavoriteFragment : Fragment() {
         favoriteViewModel.getFavorite()
 
         favoriteViewModel.favoriteMovie.observe(viewLifecycleOwner){
-            Log.d("Favorite debug", "here")
-            val adapter = FavoriteAdapter(it)
-            Log.d("Favorite content", it.toString())
+            val adapter = FavoriteAdapter(it){clickMovie->
+                val intent = Intent(activity,DetailsActivity::class.java)
+                intent.putExtra(DetailsActivity.EXTRA_DATA, clickMovie.id)
+                startActivity(intent)
+            }
             binding.rvFavorite.adapter = adapter
+
         }
 
 

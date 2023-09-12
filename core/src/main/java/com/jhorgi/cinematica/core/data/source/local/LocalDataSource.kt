@@ -6,7 +6,6 @@ import com.jhorgi.cinematica.core.domain.model.FavoriteMovie
 import com.jhorgi.cinematica.core.domain.model.MovieDetails
 import com.jhorgi.cinematica.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
 class LocalDataSource(private val movieDao: MovieDao) {
@@ -16,7 +15,7 @@ class LocalDataSource(private val movieDao: MovieDao) {
         try {
             val movieEntity = DataMapper.mapMovieDetailDomainToMovieEntity(movie, timeStamp)
             movieDao.insertMovie(movieEntity)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Log.d("Error when addMovieToFavorite", e.message.toString())
         }
 
@@ -27,10 +26,10 @@ class LocalDataSource(private val movieDao: MovieDao) {
     fun getListOfFavoriteMovie(): Flow<List<FavoriteMovie>> = flow {
         try {
             //Change entity to domain
-            val removeFlow = movieDao.getListOfFavoriteMovie().first()
-            val favoriteDomain = DataMapper.mapEntityToDomain(removeFlow)
-            emit(favoriteDomain)
-
+           movieDao.getListOfFavoriteMovie().collect{
+                DataMapper.mapEntityToDomain(it)
+                emit(DataMapper.mapEntityToDomain(it)) //emit every cahnges that happen
+            }
         } catch (e: Exception) {
             Log.d("Error when getListOfFavoriteMovie", e.message.toString())
         }
