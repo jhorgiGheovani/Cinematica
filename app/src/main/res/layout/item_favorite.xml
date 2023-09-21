@@ -55,7 +55,7 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@string/long_text"
+                android:text=" there is no overview for this content"
                 app:layout_constraintEnd_toEndOf="@id/tittleTV"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@id/tittleTV"

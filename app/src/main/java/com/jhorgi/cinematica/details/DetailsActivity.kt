@@ -1,12 +1,15 @@
 package com.jhorgi.cinematica.details
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.jhorgi.cinematica.R
+import com.jhorgi.cinematica.core.domain.model.FavoriteItem
+import com.jhorgi.cinematica.core.domain.model.MovieDetails
+import com.jhorgi.cinematica.core.domain.model.TvSeriesDetails
+import com.jhorgi.cinematica.core.utils.DataMapper
 import com.jhorgi.cinematica.databinding.ActivityDetailsBinding
 import com.jhorgi.cinematica.details.adapter.CreditsAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,6 +27,8 @@ class DetailsActivity : AppCompatActivity() {
 
 
         val movieId = intent.getIntExtra(EXTRA_DATA, 0)
+        val seriesId = intent.getIntExtra(EXTRA_DATA, 0)
+        val typeData = intent.getStringExtra(TYPE_DATA)
 
         val layoutManagerCast = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.contentLayout.rvCast.layoutManager = layoutManagerCast
@@ -31,78 +36,148 @@ class DetailsActivity : AppCompatActivity() {
         val layoutManagerCrew = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.contentLayout.rvCrew.layoutManager = layoutManagerCrew
 
-        detailMovieViewModel.getMovieCast(movieId)
-        detailMovieViewModel.getMovieCrew(movieId)
-        detailMovieViewModel.getMovieDetails(movieId)
-        detailMovieViewModel.isFavoriteMovie(movieId)
 
-        detailMovieViewModel.isFavoriteMovie.observe(this) {
+        detailMovieViewModel.isFavoriteItem.observe(this) {
             if (it != true) {
                 binding.contentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
             }
         }
 
+        if (typeData == MOVIE_TYPE) {
+            detailMovieViewModel.isFavoriteItem(movieId)
+            detailMovieViewModel.getMovieCast(movieId)
+            detailMovieViewModel.getMovieCrew(movieId)
+            detailMovieViewModel.getMovieDetails(movieId)
 
-        detailMovieViewModel.castData.observe(this) { castData ->
-            Log.d("Debug Cast", castData.toString())
-            val adapter = CreditsAdapter(castData)
-            binding.contentLayout.rvCast.adapter = adapter
-        }
-
-        detailMovieViewModel.crewItem.observe(this) { crewData ->
-            Log.d("Debug Crew", crewData.toString())
-            val adapter = CreditsAdapter(crewData)
-            binding.contentLayout.rvCrew.adapter = adapter
-        }
-
-        detailMovieViewModel.movieDetails.observe(this) { movieDetails ->
-
-            //Background poster
-            val request = ImageRequest.Builder(this)
-                .data("https://image.tmdb.org/t/p/w300/${movieDetails.posterPath}")
-                .target {
-                    binding.posterBackground.setImageDrawable(it)
-                }
-                .build()
-            imageLoader.enqueue(request)
-
-            //avatar poster
-            val avatarRequest = ImageRequest.Builder(this)
-                .data("https://image.tmdb.org/t/p/w500/${movieDetails.posterPath}")
-                .target {
-                    binding.contentLayout.poster.setImageDrawable(it)
-                }
-                .build()
-            imageLoader.enqueue(avatarRequest)
-
-
-            binding.contentLayout.tittleTV.text = movieDetails.title
-            binding.contentLayout.overViewContent.text = movieDetails.overview
-            binding.contentLayout.years.text = movieDetails.releaseDate.split("-")[0]
-            binding.contentLayout.runTimeTV.text =
-                getString(R.string.minutes_property, movieDetails.runtime.toString())
-
-            val genre = movieDetails.genres.map { it.name }
-
-            binding.contentLayout.genres.text = genre.joinToString(", ")
-
-            //Add movie To Favorite
-            binding.contentLayout.favoriteButton.setOnClickListener {
-                val currentTimeMillis = System.currentTimeMillis()  //Time Stamp
-                //check favorite status by love button color
-                if (binding.contentLayout.favoriteButton.colorFilter == null) {
-                    detailMovieViewModel.deleteMovieFromFavorite(movieDetails.id)
-                    binding.contentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
-                } else {
-                    binding.contentLayout.favoriteButton.colorFilter = null
-                    detailMovieViewModel.addMovieToFavorite(movieDetails,currentTimeMillis)
-                }
+            detailMovieViewModel.castMovieData.observe(this) { castData ->
+                val adapter = CreditsAdapter(castData)
+                binding.contentLayout.rvCast.adapter = adapter
             }
 
+            detailMovieViewModel.crewMovieData.observe(this) { crewData ->
+                val adapter = CreditsAdapter(crewData)
+                binding.contentLayout.rvCrew.adapter = adapter
+            }
+
+            detailMovieViewModel.movieDetails.observe(this) { movieDetails ->
+                bindMovieDetails(movieDetails)
+
+                //Add movie To Favorite
+                val data = DataMapper.mapMovieDetailsToFavoriteItem(movieDetails)
+                addAndDeleteFavoriteItem(movieDetails.id, data, typeData)
+            }
+        }
+        if (typeData == TV_SERIES_TYPE) {
+            detailMovieViewModel.isFavoriteItem(seriesId)
+            detailMovieViewModel.getTvSeriesDetails(seriesId)
+            detailMovieViewModel.getTvCast(seriesId)
+            detailMovieViewModel.getTvCrew(seriesId)
+
+            detailMovieViewModel.castTvData.observe(this) { castData ->
+                val adapter = CreditsAdapter(castData)
+                binding.contentLayout.rvCast.adapter = adapter
+            }
+
+            detailMovieViewModel.crewTvData.observe(this) { crewData ->
+                val adapter = CreditsAdapter(crewData)
+                binding.contentLayout.rvCrew.adapter = adapter
+            }
+
+            detailMovieViewModel.tvSeriesDetails.observe(this) { tvSeriesDetails ->
+                bindTvSeriesData(tvSeriesDetails)
+
+                //Add tv series to Favorite
+                val data = DataMapper.mapTvDetailsToFavoriteItem(tvSeriesDetails)
+                addAndDeleteFavoriteItem(tvSeriesDetails.id, data, typeData)
+            }
+        }
+
+    }
+
+    private fun bindMovieDetails(data: MovieDetails) {
+        //Load Images
+        val request = ImageRequest.Builder(this)
+            .data("https://image.tmdb.org/t/p/w300/${data.posterPath}")
+            .target {
+                binding.posterBackground.setImageDrawable(it)
+                binding.contentLayout.poster.setImageDrawable(it)
+            }
+            .build()
+        imageLoader.enqueue(request)
+
+        //bind tittle
+        binding.contentLayout.tittleTV.text = data.title
+
+        //bind overview
+        binding.contentLayout.overViewContent.text = data.overview
+
+
+        //bind release years
+        binding.contentLayout.years.text = data.releaseDate.split("-")[0]
+
+        //bind runtime
+        binding.contentLayout.runTimeTV.text =
+            getString(R.string.minutes_property, data.runtime.toString())
+
+        //bind genres
+        val genre = data.genres?.map { it.name }
+        binding.contentLayout.genres.text = genre?.joinToString(", ")
+    }
+
+    private fun bindTvSeriesData(data: TvSeriesDetails) {
+        //Load Images
+        val request = ImageRequest.Builder(this)
+            .data("https://image.tmdb.org/t/p/w300/${data.posterPath}")
+            .target {
+                binding.posterBackground.setImageDrawable(it)
+                binding.contentLayout.poster.setImageDrawable(it)
+            }
+            .build()
+        imageLoader.enqueue(request)
+
+        //bind tittle
+        binding.contentLayout.tittleTV.text = data.title
+
+        //bind overview
+        if (data.overview != "") {
+            binding.contentLayout.overViewContent.text = data.overview
+        }
+
+        //bind release years
+        if (data.releaseDate != null) {
+            binding.contentLayout.years.text = data.releaseDate!!.split("-")[0]
+        }
+
+
+        //bind runtime
+        binding.contentLayout.runTimeTV.text =
+            getString(R.string.no_runtime)
+
+        //bind genres
+        val genre = data.genres?.map { it.name }
+        binding.contentLayout.genres.text = genre?.joinToString(", ")
+    }
+
+    private fun addAndDeleteFavoriteItem(id: Int?, data: FavoriteItem, category: String) {
+        binding.contentLayout.favoriteButton.setOnClickListener {
+            val currentTimeMillis = System.currentTimeMillis()  //Time Stamp
+            //check favorite status by love button color
+            if (binding.contentLayout.favoriteButton.colorFilter == null) {
+                if (id != null) {
+                    detailMovieViewModel.deleteMovieFromFavorite(id)
+                }
+                binding.contentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
+            } else {
+                binding.contentLayout.favoriteButton.colorFilter = null
+                detailMovieViewModel.addMovieToFavorite(data, currentTimeMillis, category)
+            }
         }
     }
 
     companion object {
         const val EXTRA_DATA = "extra_data"
+        const val TYPE_DATA = "type_data"
+        const val MOVIE_TYPE = "movie"
+        const val TV_SERIES_TYPE = "tv_series"
     }
 }

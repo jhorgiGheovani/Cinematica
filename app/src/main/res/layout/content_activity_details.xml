@@ -137,6 +137,7 @@
             android:fontFamily="@font/montserrat_regular"
             android:textColor="@color/white"
             android:textSize="15sp"
+            android:text="no overview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

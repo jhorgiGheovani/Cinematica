@@ -11,9 +11,3 @@
     </shape>
 </item>
 </selector>
-
-<!--
-   android:startColor="#1F1D2B"1F1D2B
-            android:centerColor="#13121A"
-            android:endColor="@android:color/transparent"
-            android:angle="90"/>-->

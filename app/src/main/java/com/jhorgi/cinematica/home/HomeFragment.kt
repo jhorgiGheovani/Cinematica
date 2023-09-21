@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.jhorgi.cinematica.core.adapter.LoadingStateAdapter
-import com.jhorgi.cinematica.core.adapter.MoviePagingAdapter
+import com.jhorgi.cinematica.common.movieSeeAllAdapter.LoadingStateAdapter
+import com.jhorgi.cinematica.common.movieSeeAllAdapter.MoviePagingAdapter
 import com.jhorgi.cinematica.databinding.FragmentHomeBinding
 import com.jhorgi.cinematica.details.DetailsActivity
 import kotlinx.coroutines.flow.collectLatest

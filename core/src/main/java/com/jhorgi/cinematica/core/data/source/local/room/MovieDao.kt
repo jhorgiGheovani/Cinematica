@@ -11,12 +11,12 @@ import kotlinx.coroutines.flow.Flow
 interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovie(movie: MovieEntity)
-    @Query("DELETE FROM movies WHERE movieId = :itemId")
+    @Query("DELETE FROM favorite WHERE movieId = :itemId")
     suspend fun deleteById(itemId: Int)
 
-    @Query("SELECT * FROM movies ORDER BY timeStamp DESC")
-    fun getListOfFavoriteMovie(): Flow<List<MovieEntity>>
+    @Query("SELECT * FROM favorite WHERE category = :category ORDER BY timeStamp DESC")
+    fun getListOfFavoriteItem(category: String): Flow<List<MovieEntity>>
 
-    @Query("SELECT * FROM movies WHERE movieId = :itemId")
-    fun isFavoriteMovie(itemId: Int): Boolean
+    @Query("SELECT * FROM favorite WHERE movieId = :itemId")
+    fun isFavoriteItem(itemId: Int): Boolean
 }

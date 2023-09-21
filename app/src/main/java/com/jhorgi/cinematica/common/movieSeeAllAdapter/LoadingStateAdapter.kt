@@ -1,10 +1,10 @@
-package com.jhorgi.cinematica.core.adapter
+package com.jhorgi.cinematica.common.movieSeeAllAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
-import com.jhorgi.cinematica.core.databinding.ItemLoadingBinding
+import com.jhorgi.cinematica.databinding.ItemLoadingBinding
 
 class LoadingStateAdapter(private val retry: () -> Unit) :
     LoadStateAdapter<LoadingStateViewHolder>() {

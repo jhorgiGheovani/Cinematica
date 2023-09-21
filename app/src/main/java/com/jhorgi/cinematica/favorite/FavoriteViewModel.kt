@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jhorgi.cinematica.core.domain.model.FavoriteMovie
+import com.jhorgi.cinematica.core.domain.model.FavoriteItem
 import com.jhorgi.cinematica.core.domain.usecase.MovieUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.onEach
 class FavoriteViewModel(private val movieUseCase: MovieUseCase) : ViewModel() {
 
 
-    private val _favoriteMovie = MutableLiveData<List<FavoriteMovie>>()
-    val favoriteMovie: LiveData<List<FavoriteMovie>> = _favoriteMovie
+    private val _favoriteItem = MutableLiveData<List<FavoriteItem>>()
+    val favoriteItem: LiveData<List<FavoriteItem>> = _favoriteItem
 
 
-    fun getFavorite() {
-        movieUseCase.getMovieListFromFavorite()
+    fun getListOfFavoriteItem(category:String) {
+        movieUseCase.getListOfFavoriteItem(category)
             .onEach {
-                _favoriteMovie.value = it
+                _favoriteItem.value = it
             }
             .launchIn(viewModelScope)
     }

@@ -3,16 +3,16 @@ package com.jhorgi.cinematica.favorite.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.jhorgi.cinematica.core.domain.model.FavoriteMovie
-import com.jhorgi.cinematica.databinding.ItemFavoriteMovieBinding
+import com.jhorgi.cinematica.core.domain.model.FavoriteItem
+import com.jhorgi.cinematica.databinding.ItemFavoriteBinding
 
 class FavoriteAdapter(
-    private val list: List<FavoriteMovie>,
-    private val onItemClick: (FavoriteMovie) -> Unit
+    private val list: List<FavoriteItem>,
+    private val onItemClick: (FavoriteItem) -> Unit
     ): RecyclerView.Adapter<FavoriteListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteListViewHolder {
         return FavoriteListViewHolder(
-            ItemFavoriteMovieBinding.inflate(
+            ItemFavoriteBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ),
             onItemClick

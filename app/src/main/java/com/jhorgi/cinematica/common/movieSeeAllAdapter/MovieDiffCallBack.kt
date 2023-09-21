@@ -1,4 +1,4 @@
-package com.jhorgi.cinematica.core.adapter
+package com.jhorgi.cinematica.common.movieSeeAllAdapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.jhorgi.cinematica.core.domain.model.Movie

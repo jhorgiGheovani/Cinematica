@@ -26,9 +26,9 @@ val databaseModule = module {
     single {
         Room.databaseBuilder(
             androidContext(),
-            MovieDatabase::class.java, "FavoriteMovies.db"
+            MovieDatabase::class.java, "FavoriteItems.db"
         ).fallbackToDestructiveMigration()
-            .openHelperFactory(factory)
+//            .openHelperFactory(factory)
             .build()
     }
 }
@@ -63,7 +63,7 @@ val networkModule = module {
 
     single {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/movie/")
+            .baseUrl("https://api.themoviedb.org/3/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(get())
             .build()

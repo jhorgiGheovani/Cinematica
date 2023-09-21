@@ -1,9 +1,9 @@
-package com.jhorgi.cinematica.core.adapter
+package com.jhorgi.cinematica.common.movieSeeAllAdapter
 
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
-import com.jhorgi.cinematica.core.databinding.ItemLoadingBinding
+import com.jhorgi.cinematica.databinding.ItemLoadingBinding
 
 class LoadingStateViewHolder(private val binding: ItemLoadingBinding, retry: () -> Unit):
     RecyclerView.ViewHolder(binding.root)  {

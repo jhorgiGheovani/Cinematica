@@ -17,8 +17,12 @@
         android:theme="@style/Theme.Cinematica"
         tools:targetApi="31">
         <activity
+            android:name=".seeAllPages.SeeAllActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:exported="false" />
+        <activity
             android:name=".details.DetailsActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

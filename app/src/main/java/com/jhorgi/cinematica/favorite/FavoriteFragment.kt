@@ -1,21 +1,18 @@
 package com.jhorgi.cinematica.favorite
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayoutMediator
+import com.jhorgi.cinematica.R
 import com.jhorgi.cinematica.databinding.FragmentFavoriteBinding
-import com.jhorgi.cinematica.details.DetailsActivity
-import com.jhorgi.cinematica.favorite.adapter.FavoriteAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.jhorgi.cinematica.favorite.adapter.SectionsPagerAdapter
 
 
 class FavoriteFragment : Fragment() {
-
-    private val favoriteViewModel: FavoriteViewModel by viewModel()
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
@@ -31,23 +28,23 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.rvFavorite.layoutManager = layoutManager
+        val sectionsPagerAdapter = SectionsPagerAdapter(requireActivity())
+        val viewPager = binding.viewPager
+        viewPager.adapter = sectionsPagerAdapter
 
-        favoriteViewModel.getFavorite()
+        val tabs = binding.tabs
+        TabLayoutMediator(tabs,viewPager){tab,position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
 
-        favoriteViewModel.favoriteMovie.observe(viewLifecycleOwner){
-            val adapter = FavoriteAdapter(it){clickMovie->
-                val intent = Intent(activity,DetailsActivity::class.java)
-                intent.putExtra(DetailsActivity.EXTRA_DATA, clickMovie.id)
-                startActivity(intent)
-            }
-            binding.rvFavorite.adapter = adapter
+    }
 
-        }
-
-
-
+    companion object {
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.tab_text_1,
+            R.string.tab_text_2
+        )
     }
 
 }

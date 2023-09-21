@@ -8,30 +8,33 @@ import com.jhorgi.cinematica.core.domain.model.GenresItem
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity(tableName = "movies")
+@Entity(tableName = "favorite")
 data class MovieEntity(
     @PrimaryKey
     @ColumnInfo(name = "movieId")
-    var movieId: Int,
+    var movieId: Int?=null,
 
     @ColumnInfo(name = "tittle")
-    var title: String,
+    var title: String?=null,
 
     @ColumnInfo(name = "genres")
-    var genres: List<GenresItem>,
+    var genres: List<GenresItem>?=null,
 
     @ColumnInfo(name = "releaseDate")
-    var releaseDate: String,
+    var releaseDate: String?=null,
 
     @ColumnInfo(name = "overview")
-    var overview: String,
+    var overview: String?=null,
 
     @ColumnInfo(name = "posterPath")
     var posterPath: String? = null,
 
     @ColumnInfo(name = "voteAverage")
-    var voteAverage: Double,
+    var voteAverage: Double?=null,
 
     @ColumnInfo(name = "timeStamp")
-    var timeStamp: Long
+    var timeStamp: Long?=null,
+
+    @ColumnInfo(name = "category")
+    var category: String?=null
 ) : Parcelable
