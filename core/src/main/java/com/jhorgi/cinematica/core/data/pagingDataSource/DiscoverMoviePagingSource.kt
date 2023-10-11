@@ -23,9 +23,14 @@ class DiscoverMoviePagingSource(private val apiService: ApiService): PagingSourc
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val page = params.key ?: INITIAL_PAGE_INDEX
+            val genreList = apiService.movieListGenres().genres  //1. Fetch List<Genres>
 
+            val idToMap = genreList.associateBy { it.id }
             val dataMapped = apiService.discoverMovie(page= page).results.map {
-                DataMapper.mapMovieResponseToDomain(it)
+                val listOfGenre = it.genreIds.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+                DataMapper.mapMovieResponseToDomain(it,listOfGenre)
             }
 
             val nextKey =

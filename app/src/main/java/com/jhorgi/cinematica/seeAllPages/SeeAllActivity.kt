@@ -1,11 +1,12 @@
 package com.jhorgi.cinematica.seeAllPages
 
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jhorgi.cinematica.R
 import com.jhorgi.cinematica.databinding.ActivitySeeAllBinding
@@ -22,9 +23,9 @@ class SeeAllActivity : AppCompatActivity() {
 
         binding = ActivitySeeAllBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val dataTittle = intent.getStringExtra(SearchFragment.TYPE_TITTLE_DATA)
 
+        window?.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
         //support action setting
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.custom_action_bar_tittle)

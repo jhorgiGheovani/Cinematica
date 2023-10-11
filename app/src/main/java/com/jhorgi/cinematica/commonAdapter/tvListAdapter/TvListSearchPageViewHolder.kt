@@ -1,9 +1,8 @@
-package com.jhorgi.cinematica.common.tvListAdapter
+package com.jhorgi.cinematica.commonAdapter.tvListAdapter
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.jhorgi.cinematica.core.domain.model.TvSeries
-import com.jhorgi.cinematica.core.utils.DataMapper
 import com.jhorgi.cinematica.databinding.ItemListCommonBinding
 
 class TvListSearchPageViewHolder(
@@ -19,8 +18,9 @@ class TvListSearchPageViewHolder(
 
             binding.tittleTV.text = data.originalTitle
 
-            val convertGenre = DataMapper.getMovieGenres(data.genres!!)
-            binding.genres.text = convertGenre.joinToString (", ")
+
+//            val convertGenre = DataMapper.getMovieGenres(data.genres!!)
+//            binding.genres.text = convertGenre.joinToString (", ")
             itemView.setOnClickListener { onItemClick(data) }
         }
 }

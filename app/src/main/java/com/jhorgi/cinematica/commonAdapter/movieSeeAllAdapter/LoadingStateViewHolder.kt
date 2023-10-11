@@ -1,4 +1,4 @@
-package com.jhorgi.cinematica.common.movieSeeAllAdapter
+package com.jhorgi.cinematica.commonAdapter.movieSeeAllAdapter
 
 import androidx.core.view.isVisible
 import androidx.paging.LoadState

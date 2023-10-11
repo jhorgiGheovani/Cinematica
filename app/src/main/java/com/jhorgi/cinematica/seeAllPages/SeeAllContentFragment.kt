@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jhorgi.cinematica.common.movieSeeAllAdapter.LoadingStateAdapter
-import com.jhorgi.cinematica.common.movieSeeAllAdapter.MoviePagingAdapter
-import com.jhorgi.cinematica.common.tvSeriesSeeAllAdapter.TvSeriesPagingAdapter
+import com.jhorgi.cinematica.commonAdapter.movieSeeAllAdapter.LoadingStateAdapter
+import com.jhorgi.cinematica.commonAdapter.movieSeeAllAdapter.MoviePagingAdapter
+import com.jhorgi.cinematica.commonAdapter.tvSeriesSeeAllAdapter.TvSeriesPagingAdapter
 import com.jhorgi.cinematica.databinding.FragmentSeeAllContentBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,7 +41,6 @@ class SeeAllContentFragment : Fragment() {
 
         if(index==1){
             val moviePagingAdapter = MoviePagingAdapter()
-
             binding.rvSeeAllFragment.adapter = moviePagingAdapter.withLoadStateHeaderAndFooter(
                 footer = LoadingStateAdapter{
                     moviePagingAdapter.retry()
@@ -64,7 +63,6 @@ class SeeAllContentFragment : Fragment() {
 
         }
         if(index==2){
-
             val tvSeriesPagingAdapter = TvSeriesPagingAdapter()
 
             binding.rvSeeAllFragment.adapter = tvSeriesPagingAdapter.withLoadStateHeaderAndFooter(

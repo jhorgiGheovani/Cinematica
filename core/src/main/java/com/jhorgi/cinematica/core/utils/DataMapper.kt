@@ -11,8 +11,8 @@ import com.jhorgi.cinematica.core.domain.model.FavoriteItem
 import com.jhorgi.cinematica.core.domain.model.GenresItem
 import com.jhorgi.cinematica.core.domain.model.Movie
 import com.jhorgi.cinematica.core.domain.model.MovieDetails
-import com.jhorgi.cinematica.core.domain.model.TvSeriesDetails
 import com.jhorgi.cinematica.core.domain.model.TvSeries
+import com.jhorgi.cinematica.core.domain.model.TvSeriesDetails
 
 object DataMapper {
 
@@ -29,20 +29,21 @@ object DataMapper {
             )
         }
 
-    fun mapDomainToMovieEntity(input: FavoriteItem, timeStamp: Long, category: String) = MovieEntity(
-        movieId = input.id,
-        title = input.title,
-        genres = input.genres,
-        releaseDate = input.releaseDate,
-        overview = input.overview,
-        posterPath = input.posterPath,
-        voteAverage = input.voteAverage,
-        timeStamp = timeStamp,
-        category = category
-    )
+    fun mapDomainToMovieEntity(input: FavoriteItem, timeStamp: Long, category: String) =
+        MovieEntity(
+            movieId = input.id,
+            title = input.title,
+            genres = input.genres,
+            releaseDate = input.releaseDate,
+            overview = input.overview,
+            posterPath = input.posterPath,
+            voteAverage = input.voteAverage,
+            timeStamp = timeStamp,
+            category = category
+        )
 
     fun mapMovieDetailsToFavoriteItem(input: MovieDetails) = FavoriteItem(
-        id=input.id,
+        id = input.id,
         title = input.title,
         genres = input.genres,
         releaseDate = input.releaseDate,
@@ -51,8 +52,8 @@ object DataMapper {
         voteAverage = input.voteAverage,
     )
 
-    fun mapTvDetailsToFavoriteItem(input: TvSeriesDetails)= FavoriteItem(
-        id=input.id,
+    fun mapTvDetailsToFavoriteItem(input: TvSeriesDetails) = FavoriteItem(
+        id = input.id,
         title = input.title,
         genres = input.genres,
         releaseDate = input.releaseDate,
@@ -61,20 +62,19 @@ object DataMapper {
         voteAverage = input.voteAverage,
     )
 
-    fun mapMovieResponseToDomain(input: ResultsItem) = Movie(
+    fun mapMovieResponseToDomain(input: ResultsItem, genre: List<String>) = Movie(
         movieId = input.id,
         title = input.title,
         overview = input.overview,
         originalLanguage = input.originalLanguage,
         originalTitle = input.originalTitle,
-        video = input.video,
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
         releaseDate = input.releaseDate,
-        genres = input.genreIds
+        genres = genre
     )
 
-    fun mapTvShowResponseToDomain(input: TvResults) = TvSeries(
+    fun mapTvShowResponseToDomain(input: TvResults, genre: List<String>) = TvSeries(
         id = input.id,
         title = input.name,
         overview = input.overview,
@@ -83,19 +83,18 @@ object DataMapper {
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
         firstAirDate = input.firstAirDate,
-        genres = input.genreIds
+        genres = genre
     )
 
     fun mapMovieDetailsResponseToMovieDetails(
         input: MovieDetailsResponse
     ): MovieDetails {
-
+//
         val genre = input.genres?.map {
-            GenresItem(it.name)
+            GenresItem(id = it.id, name = it.name)
         }
         return MovieDetails(
-            title = input.title,
-            genres = genre, // You can't directly map a list to a string without custom logic
+            title = input.title, // You can't directly map a list to a string without custom logic
             id = input.id,
             overview = input.overview,
             originalTitle = input.originalTitle,
@@ -103,6 +102,7 @@ object DataMapper {
             posterPath = input.posterPath,
             releaseDate = input.releaseDate,
             voteAverage = input.voteAverage,
+            genres = genre
         )
     }
 
@@ -110,13 +110,13 @@ object DataMapper {
         input: TvDetailsResponse
     ): TvSeriesDetails {
 
-        val genre = input.genres?.map {
-            GenresItem(it.name)
-        }
+//        val genre = input.genres?.map {
+//            GenresItem(it.name)
+//        }
 
         return TvSeriesDetails(
             title = input.name,
-            genres = genre, // You can't directly map a list to a string without custom logic
+//            genres = genre, // You can't directly map a list to a string without custom logic
             id = input.id,
             overview = input.overview,
             originalTitle = input.originalName,

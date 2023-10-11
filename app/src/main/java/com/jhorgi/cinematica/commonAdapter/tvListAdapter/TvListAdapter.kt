@@ -1,4 +1,4 @@
-package com.jhorgi.cinematica.common.tvListAdapter
+package com.jhorgi.cinematica.commonAdapter.tvListAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

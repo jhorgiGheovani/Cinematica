@@ -1,4 +1,4 @@
-package com.jhorgi.cinematica.common.tvSeriesSeeAllAdapter
+package com.jhorgi.cinematica.commonAdapter.tvSeriesSeeAllAdapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.jhorgi.cinematica.core.domain.model.TvSeries

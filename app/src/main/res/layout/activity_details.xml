@@ -22,7 +22,7 @@
 
 
     <include
-        android:id="@+id/contentLayout"
+        android:id="@+id/discoverContentLayout"
         layout="@layout/content_activity_details" />
 
 </FrameLayout>

@@ -23,8 +23,9 @@ class DiscoverTvSeriesPagingSource(private val apiService: ApiService): PagingSo
         return try {
             val page = params.key ?: INITIAL_PAGE_INDEX
 
+            val emptyGenreList = listOf<String>()
             val dataMapped = apiService.discoverTvShow(page= page).results.map {
-                DataMapper.mapTvShowResponseToDomain(it)
+                DataMapper.mapTvShowResponseToDomain(it,emptyGenreList)
             }
 
             val nextKey =

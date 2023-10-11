@@ -1,4 +1,4 @@
-package com.jhorgi.cinematica.common.tvSeriesSeeAllAdapter
+package com.jhorgi.cinematica.commonAdapter.tvSeriesSeeAllAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

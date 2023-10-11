@@ -2,6 +2,7 @@ package com.jhorgi.cinematica.details
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.imageLoader
 import coil.request.ImageRequest
@@ -21,25 +22,24 @@ class DetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        window?.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
         val movieId = intent.getIntExtra(EXTRA_DATA, 0)
         val seriesId = intent.getIntExtra(EXTRA_DATA, 0)
         val typeData = intent.getStringExtra(TYPE_DATA)
 
         val layoutManagerCast = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.contentLayout.rvCast.layoutManager = layoutManagerCast
+        binding.discoverContentLayout.rvCast.layoutManager = layoutManagerCast
 
         val layoutManagerCrew = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.contentLayout.rvCrew.layoutManager = layoutManagerCrew
+        binding.discoverContentLayout.rvCrew.layoutManager = layoutManagerCrew
 
 
         detailMovieViewModel.isFavoriteItem.observe(this) {
             if (it != true) {
-                binding.contentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
+                binding.discoverContentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
             }
         }
 
@@ -51,12 +51,12 @@ class DetailsActivity : AppCompatActivity() {
 
             detailMovieViewModel.castMovieData.observe(this) { castData ->
                 val adapter = CreditsAdapter(castData)
-                binding.contentLayout.rvCast.adapter = adapter
+                binding.discoverContentLayout.rvCast.adapter = adapter
             }
 
             detailMovieViewModel.crewMovieData.observe(this) { crewData ->
                 val adapter = CreditsAdapter(crewData)
-                binding.contentLayout.rvCrew.adapter = adapter
+                binding.discoverContentLayout.rvCrew.adapter = adapter
             }
 
             detailMovieViewModel.movieDetails.observe(this) { movieDetails ->
@@ -75,12 +75,12 @@ class DetailsActivity : AppCompatActivity() {
 
             detailMovieViewModel.castTvData.observe(this) { castData ->
                 val adapter = CreditsAdapter(castData)
-                binding.contentLayout.rvCast.adapter = adapter
+                binding.discoverContentLayout.rvCast.adapter = adapter
             }
 
             detailMovieViewModel.crewTvData.observe(this) { crewData ->
                 val adapter = CreditsAdapter(crewData)
-                binding.contentLayout.rvCrew.adapter = adapter
+                binding.discoverContentLayout.rvCrew.adapter = adapter
             }
 
             detailMovieViewModel.tvSeriesDetails.observe(this) { tvSeriesDetails ->
@@ -100,28 +100,27 @@ class DetailsActivity : AppCompatActivity() {
             .data("https://image.tmdb.org/t/p/w300/${data.posterPath}")
             .target {
                 binding.posterBackground.setImageDrawable(it)
-                binding.contentLayout.poster.setImageDrawable(it)
+                binding.discoverContentLayout.poster.setImageDrawable(it)
             }
             .build()
         imageLoader.enqueue(request)
-
         //bind tittle
-        binding.contentLayout.tittleTV.text = data.title
+        binding.discoverContentLayout.tittleTV.text = data.title
 
         //bind overview
-        binding.contentLayout.overViewContent.text = data.overview
+        binding.discoverContentLayout.overViewContent.text = data.overview
 
 
         //bind release years
-        binding.contentLayout.years.text = data.releaseDate.split("-")[0]
+        binding.discoverContentLayout.years.text = data.releaseDate.split("-")[0]
 
         //bind runtime
-        binding.contentLayout.runTimeTV.text =
+        binding.discoverContentLayout.runTimeTV.text =
             getString(R.string.minutes_property, data.runtime.toString())
 
         //bind genres
         val genre = data.genres?.map { it.name }
-        binding.contentLayout.genres.text = genre?.joinToString(", ")
+        binding.discoverContentLayout.genres.text = genre?.joinToString(", ")
     }
 
     private fun bindTvSeriesData(data: TvSeriesDetails) {
@@ -130,45 +129,45 @@ class DetailsActivity : AppCompatActivity() {
             .data("https://image.tmdb.org/t/p/w300/${data.posterPath}")
             .target {
                 binding.posterBackground.setImageDrawable(it)
-                binding.contentLayout.poster.setImageDrawable(it)
+                binding.discoverContentLayout.poster.setImageDrawable(it)
             }
             .build()
         imageLoader.enqueue(request)
 
         //bind tittle
-        binding.contentLayout.tittleTV.text = data.title
+        binding.discoverContentLayout.tittleTV.text = data.title
 
         //bind overview
         if (data.overview != "") {
-            binding.contentLayout.overViewContent.text = data.overview
+            binding.discoverContentLayout.overViewContent.text = data.overview
         }
 
         //bind release years
         if (data.releaseDate != null) {
-            binding.contentLayout.years.text = data.releaseDate!!.split("-")[0]
+            binding.discoverContentLayout.years.text = data.releaseDate!!.split("-")[0]
         }
 
 
         //bind runtime
-        binding.contentLayout.runTimeTV.text =
+        binding.discoverContentLayout.runTimeTV.text =
             getString(R.string.no_runtime)
 
         //bind genres
         val genre = data.genres?.map { it.name }
-        binding.contentLayout.genres.text = genre?.joinToString(", ")
+        binding.discoverContentLayout.genres.text = genre?.joinToString(", ")
     }
 
     private fun addAndDeleteFavoriteItem(id: Int?, data: FavoriteItem, category: String) {
-        binding.contentLayout.favoriteButton.setOnClickListener {
+        binding.discoverContentLayout.favoriteButton.setOnClickListener {
             val currentTimeMillis = System.currentTimeMillis()  //Time Stamp
             //check favorite status by love button color
-            if (binding.contentLayout.favoriteButton.colorFilter == null) {
+            if (binding.discoverContentLayout.favoriteButton.colorFilter == null) {
                 if (id != null) {
                     detailMovieViewModel.deleteMovieFromFavorite(id)
                 }
-                binding.contentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
+                binding.discoverContentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
             } else {
-                binding.contentLayout.favoriteButton.colorFilter = null
+                binding.discoverContentLayout.favoriteButton.colorFilter = null
                 detailMovieViewModel.addMovieToFavorite(data, currentTimeMillis, category)
             }
         }

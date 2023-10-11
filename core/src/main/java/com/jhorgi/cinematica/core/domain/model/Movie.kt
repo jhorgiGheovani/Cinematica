@@ -9,10 +9,9 @@ data class Movie(
     val title: String,
     val overview: String,
     val originalLanguage: String,
-    val genres: List<Int>,
+    val genres: List<String>,
     val originalTitle: String,
-    val video: Boolean,
-    val posterPath: String,
-    val backdropPath: String,
+    val posterPath: String?=null,
+    val backdropPath: String?=null,
     val releaseDate: String,
 ) : Parcelable

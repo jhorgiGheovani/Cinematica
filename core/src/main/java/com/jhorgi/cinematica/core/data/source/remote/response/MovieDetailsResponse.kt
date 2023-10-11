@@ -17,13 +17,13 @@ data class MovieDetailsResponse(
 	val title: String,
 
 	@field:SerializedName("backdrop_path")
-	val backdropPath: String,
+	val backdropPath: String?=null,
 
 	@field:SerializedName("revenue")
 	val revenue: Int,
 
 	@field:SerializedName("genres")
-	val genres: List<GenresItem>?=null,
+	val genres: List<GenresItem> ?=null,
 
 	@field:SerializedName("popularity")
 	val popularity: Double,
@@ -129,13 +129,4 @@ data class BelongsToCollection(
 
 	@field:SerializedName("poster_path")
 	val posterPath: String
-)
-
-data class GenresItem(
-
-	@field:SerializedName("name")
-	val name: String,
-
-	@field:SerializedName("id")
-	val id: Int
 )

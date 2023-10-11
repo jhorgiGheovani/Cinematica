@@ -14,36 +14,50 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 
 class MovieInteractor(private val movieRepository: IMovieRepository) : MovieUseCase {
-    override fun getMovie(): Flow<PagingData<Movie>> = movieRepository.getMovie()
+
+//    override fun tvListGenres(): Flow<Resource<List<Genres>>> = movieRepository.tvListGenres()
+
+    override fun getPopularMovie(): Flow<Resource<List<Movie>>> =movieRepository.getPopularMovie()
+    override fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = movieRepository.getTopRatedMovie()
+
+    override fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = movieRepository.getNowPlayingMovie()
+
+    override fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = movieRepository.getPopularTvShow()
+
+    override fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = movieRepository.getTopRatedTvShows()
+
+    override fun movieSearch(query: String): Flow<Resource<List<Movie>>> = movieRepository.movieSearch(query)
+    override fun getUpComingMovie(): Flow<Resource<List<Movie>>> = movieRepository.getUpComingMovie()
+
     override fun discoverMovie(): Flow<Resource<List<Movie>>> = movieRepository.discoverMovie()
     override fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>> = movieRepository.getDiscoverMovieWithPaging()
 
     override fun discoverTvShow(): Flow<Resource<List<TvSeries>>> = movieRepository.discoverTvShow()
     override fun getDiscoverTvSeriesWithPaging(): Flow<PagingData<TvSeries>> = movieRepository.getDiscoverTvSeriesWithPaging()
 
-    override fun getMovieDetails(movie_id: Int): Flow<MovieDetails> =
-        movieRepository.getMovieDetails(movie_id)
+    override fun getMovieDetails(movieId: Int): Flow<MovieDetails> =
+        movieRepository.getMovieDetails(movieId)
 
-    override fun getTvSeriesDetails(series_id: Int): Flow<TvSeriesDetails> =
-        movieRepository.getTvSeriesDetails(series_id)
+    override fun getTvSeriesDetails(seriesId: Int): Flow<TvSeriesDetails> =
+        movieRepository.getTvSeriesDetails(seriesId)
 
-    override fun getMovieCast(movie_id: Int): Flow<List<Credit>> =
-        movieRepository.getMovieCast(movie_id).flowOn(Dispatchers.IO)
+    override fun getMovieCast(movieId: Int): Flow<List<Credit>> =
+        movieRepository.getMovieCast(movieId).flowOn(Dispatchers.IO)
 
-    override fun getMovieCrew(movie_id: Int): Flow<List<Credit>> =
-        movieRepository.getMovieCrew(movie_id).flowOn(Dispatchers.IO)
+    override fun getMovieCrew(movieId: Int): Flow<List<Credit>> =
+        movieRepository.getMovieCrew(movieId).flowOn(Dispatchers.IO)
 
-    override fun getTvCast(series_id: Int): Flow<List<Credit>> =
-        movieRepository.getTvCast(series_id)
+    override fun getTvCast(seriesId: Int): Flow<List<Credit>> =
+        movieRepository.getTvCast(seriesId)
 
-    override fun getTvCrew(series_id: Int): Flow<List<Credit>> =
-        movieRepository.getTvCrew(series_id)
+    override fun getTvCrew(seriesId: Int): Flow<List<Credit>> =
+        movieRepository.getTvCrew(seriesId)
 
     override suspend fun addItemToFavorite(movie: FavoriteItem, timeStamp: Long, category: String) =
         movieRepository.addMovieToFavorite(movie, timeStamp, category)
 
-    override suspend fun deleteMovieFromFavorite(movie_id: Int) =
-        movieRepository.deleteMovieFromFavorite(movie_id)
+    override suspend fun deleteMovieFromFavorite(movieId: Int) =
+        movieRepository.deleteMovieFromFavorite(movieId)
 
     override fun getListOfFavoriteItem(category: String): Flow<List<FavoriteItem>> =
         movieRepository.getListOfFavoriteItem(category)

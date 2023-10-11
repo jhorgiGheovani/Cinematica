@@ -7,7 +7,6 @@ import androidx.paging.PagingData
 import com.jhorgi.cinematica.core.data.Resource
 import com.jhorgi.cinematica.core.data.pagingDataSource.DiscoverMoviePagingSource
 import com.jhorgi.cinematica.core.data.pagingDataSource.DiscoverTvSeriesPagingSource
-import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource
 import com.jhorgi.cinematica.core.data.source.remote.network.ApiService
 import com.jhorgi.cinematica.core.domain.model.Credit
 import com.jhorgi.cinematica.core.domain.model.Movie
@@ -22,21 +21,146 @@ import kotlinx.coroutines.flow.flow
 const val NETWORK_PAGE_SIZE = 25
 
 class RemoteDataSource(private val apiService: ApiService) {
-    fun getMovie(): Flow<PagingData<Movie>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                MoviePagingSource(apiService = apiService)
+//    fun getMovie(): Flow<PagingData<Movie>> {
+//        return Pager(
+//            config = PagingConfig(
+//                pageSize = NETWORK_PAGE_SIZE,
+//                enablePlaceholders = false
+//            ),
+//            pagingSourceFactory = {
+//                MoviePagingSource(apiService = apiService)
+//            }
+//        ).flow
+//    }
+
+
+//    fun tvListGenres(): Flow<Resource<List<Genres>>> = flow {
+//        try {
+//            val response = apiService.tvListGenres()
+//            emit(Resource.Success(response))
+//        } catch (e: Exception) {
+//            emit(Resource.Error("can't load genres due to error"))
+//        }
+//    }
+
+
+    fun getPopularMovie(): Flow<Resource<List<Movie>>> = flow {
+        try {
+
+            val genreList = apiService.movieListGenres().genres  //1. Fetch List<Genres>
+
+            val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
+
+            val response = apiService.getPopularMovie().results.map {
+                val listOfGenre = it.genreIds.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+                DataMapper.mapMovieResponseToDomain(it,listOfGenre)
             }
-        ).flow
+          emit(Resource.Success(response))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
     }
 
-    fun getMovieDetails(movie_id: Int): Flow<MovieDetails> = flow {
+    fun getUpComingMovie(): Flow<Resource<List<Movie>>> = flow {
         try {
-            val response = apiService.getMovieDetails(movie_id)
+
+            val response = apiService.getUpComingMovie().results.map{ data->
+
+                val emptyList = listOf<String>()
+                DataMapper.mapMovieResponseToDomain(data, emptyList)
+            }
+            emit(Resource.Success(response))
+
+        }catch (e:Exception){
+            emit(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = flow {
+        try {
+
+            val genreList = apiService.movieListGenres().genres  //1. Fetch List<Genres>
+
+            val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
+
+
+            val response = apiService.getTopRatedMovie().results.map { data ->
+
+                val listOfGenre = data.genreIds.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+
+                DataMapper.mapMovieResponseToDomain(data, listOfGenre)
+            }
+            emit(Resource.Success(response))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = flow {
+        try {
+
+            val genreList = apiService.movieListGenres().genres  //1. Fetch List<Genres>
+
+            val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
+
+            val response = apiService.getNowPlayingMovie().results.map { data ->
+                val listOfGenre = data.genreIds.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+
+                DataMapper.mapMovieResponseToDomain(data,listOfGenre)
+            }
+            emit(Resource.Success(response))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = flow {
+        try {
+
+            val genre = apiService.tvListGenres().genres
+            val idToMap = genre.associateBy { it.id }
+            val response = apiService.getPopularTvShow().results.map { data ->
+                val listOfGenre = data.genreIds?.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+
+                DataMapper.mapTvShowResponseToDomain(data,listOfGenre!!)
+            }
+            emit(Resource.Success(response))
+
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = flow {
+        try {
+
+            val genre = apiService.tvListGenres().genres
+            val idToMap = genre.associateBy { it.id }
+            val response = apiService.getPopularTvShow().results.map { data ->
+                val listOfGenre = data.genreIds?.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+
+                DataMapper.mapTvShowResponseToDomain(data,listOfGenre!!)
+            }
+            emit(Resource.Success(response))
+
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getMovieDetails(movieId: Int): Flow<MovieDetails> = flow {
+        try {
+            val response = apiService.getMovieDetails(movieId)
             val movieDetails = DataMapper.mapMovieDetailsResponseToMovieDetails(response)
             emit(movieDetails)
         } catch (e: Exception) {
@@ -44,9 +168,9 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getTvSeriesDetails(series_id: Int): Flow<TvSeriesDetails> = flow {
+    fun getTvSeriesDetails(seriesId: Int): Flow<TvSeriesDetails> = flow {
         try {
-            val response = apiService.getTvDetails(series_id)
+            val response = apiService.getTvDetails(seriesId)
             val tvSeriesDetails = DataMapper.mapTvDetailsResponseToDomain(response)
             Log.d("FirstAirDate", tvSeriesDetails.toString())
             emit(tvSeriesDetails)
@@ -55,9 +179,9 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getMovieCast(movie_id: Int): Flow<List<Credit>> = flow {
+    fun getMovieCast(movieId: Int): Flow<List<Credit>> = flow {
         try {
-            val response = apiService.getMovieCredits(movie_id)
+            val response = apiService.getMovieCredits(movieId)
             val cast = DataMapper.mapCreditsResponseToCastCreditModel(response)
             emit(cast)
         } catch (e: Exception) {
@@ -65,9 +189,9 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getMovieCrews(movie_id: Int): Flow<List<Credit>> = flow {
+    fun getMovieCrews(movieId: Int): Flow<List<Credit>> = flow {
         try {
-            val response = apiService.getMovieCredits(movie_id)
+            val response = apiService.getMovieCredits(movieId)
             val crewList = DataMapper.mapCreditsResponseToCrewCreditModel(response)
             emit(crewList)
 
@@ -76,9 +200,9 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getTvCast(series_id: Int): Flow<List<Credit>> = flow {
+    fun getTvCast(seriesId: Int): Flow<List<Credit>> = flow {
         try {
-            val response = apiService.getSeriesCredits(series_id)
+            val response = apiService.getSeriesCredits(seriesId)
             val cast = DataMapper.mapCreditsResponseToCastCreditModel(response)
             Log.d("credits getTvCast", cast.toString())
             emit(cast)
@@ -87,9 +211,9 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getTvCrews(series_id: Int): Flow<List<Credit>> = flow {
+    fun getTvCrews(seriesId: Int): Flow<List<Credit>> = flow {
         try {
-            val response = apiService.getSeriesCredits(series_id)
+            val response = apiService.getSeriesCredits(seriesId)
             val crewList = DataMapper.mapCreditsResponseToCrewCreditModel(response)
             emit(crewList)
 
@@ -100,17 +224,25 @@ class RemoteDataSource(private val apiService: ApiService) {
 
     fun discoverMovie(): Flow<Resource<List<Movie>>> = flow {
         try {
-            delay(2000)
+            delay(1000)
+
+            val genreList = apiService.movieListGenres().genres  //1. Fetch List<Genres>
+
+            val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
+
             val response = apiService.discoverMovie().results.map {
-                DataMapper.mapMovieResponseToDomain(it)
+                val listOfGenre = it.genreIds.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+                DataMapper.mapMovieResponseToDomain(it, listOfGenre)
             }
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            emit( Resource.Error(e.message.toString()))
+            emit(Resource.Error(e.message.toString()))
         }
     }
 
-    fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>>{
+    fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
                 pageSize = NETWORK_PAGE_SIZE,
@@ -122,7 +254,7 @@ class RemoteDataSource(private val apiService: ApiService) {
         ).flow
     }
 
-    fun getDiscoverTvSeriesWithPaging(): Flow<PagingData<TvSeries>>{
+    fun getDiscoverTvSeriesWithPaging(): Flow<PagingData<TvSeries>> {
         return Pager(
             config = PagingConfig(
                 pageSize = NETWORK_PAGE_SIZE,
@@ -136,13 +268,45 @@ class RemoteDataSource(private val apiService: ApiService) {
 
     fun discoverTvShow(): Flow<Resource<List<TvSeries>>> = flow {
         try {
+
+            val genre = apiService.tvListGenres().genres
+            val idToMap = genre.associateBy { it.id }
+
             val response = apiService.discoverTvShow().results.map {
-                DataMapper.mapTvShowResponseToDomain(it)
+
+                val listOfGenre = it.genreIds?.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+
+                DataMapper.mapTvShowResponseToDomain(it, listOfGenre!!)
             }
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            emit( Resource.Error(e.message.toString()))
+            emit(Resource.Error(e.message.toString()))
             Log.d("Error RemoteDatasource discoverTvShow", e.message.toString())
+        }
+    }
+
+    fun movieSearch(query: String): Flow<Resource<List<Movie>>> = flow {
+        try {
+
+            val genreList = apiService.movieListGenres().genres  //1. Fetch List<Genres>
+
+            val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
+
+            val response = apiService.moviesSearch(query).results.map {
+                val listOfGenre = it.genreIds.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+
+                DataMapper.mapMovieResponseToDomain(it, listOfGenre)
+            }
+            if (response.isNotEmpty()) {
+                emit(Resource.Success(response))
+            }
+
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
         }
     }
 
