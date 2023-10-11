@@ -209,8 +209,8 @@ data class SeasonsItem(
 data class GenresTvItem(
 
 	@field:SerializedName("name")
-	val name: String? = null,
+	val name: String,
 
 	@field:SerializedName("id")
-	val id: Int? = null
+	val id: Int
 )

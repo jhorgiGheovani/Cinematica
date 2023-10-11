@@ -16,6 +16,8 @@ import com.jhorgi.cinematica.core.data.Resource
 import com.jhorgi.cinematica.databinding.FragmentHomeBinding
 import com.jhorgi.cinematica.details.DetailsActivity
 import com.jhorgi.cinematica.home.imagesSliderAdapter.ImagesSliideAdapter
+import com.jhorgi.cinematica.seeAllPages.SeeAllActivity
+import com.jhorgi.cinematica.seeAllPages.SeeAllContentFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
 
@@ -47,6 +49,12 @@ class HomeFragment : Fragment() {
 
         homeViewModel.getUpComingMovie()
         fetchUpComingMovie()
+
+        binding.seeAllPopularContent.setOnClickListener {
+            val intent = Intent(activity, SeeAllActivity::class.java)
+            intent.putExtra(SeeAllActivity.TYPE_TITTLE_DATA, SeeAllContentFragment.POPULAR)
+            startActivity(intent)
+        }
 
     }
 

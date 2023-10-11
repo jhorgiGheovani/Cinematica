@@ -10,4 +10,8 @@ class SeeAllPagesViewModel(movieUseCase: MovieUseCase)  : ViewModel() {
     val discoverMovie = movieUseCase.getDiscoverMovieWithPaging().cachedIn(viewModelScope)
 
     val discoverTvSeries = movieUseCase.getDiscoverTvSeriesWithPaging().cachedIn(viewModelScope)
+
+    val popularMovie = movieUseCase.getPopularMovieWithPaging().cachedIn(viewModelScope)
+
+    val popularTvShow = movieUseCase.getPopularTvShowWithPaging().cachedIn(viewModelScope)
 }

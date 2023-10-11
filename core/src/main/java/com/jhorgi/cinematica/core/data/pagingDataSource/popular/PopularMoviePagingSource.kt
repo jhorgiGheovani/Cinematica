@@ -1,31 +1,35 @@
-package com.jhorgi.cinematica.core.data.pagingDataSource
+package com.jhorgi.cinematica.core.data.pagingDataSource.popular
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.jhorgi.cinematica.core.data.source.remote.network.ApiService
-import com.jhorgi.cinematica.core.domain.model.TvSeries
+import com.jhorgi.cinematica.core.domain.model.Movie
 import com.jhorgi.cinematica.core.utils.DataMapper
 
-class DiscoverTvSeriesPagingSource(private val apiService: ApiService): PagingSource<Int, TvSeries>() {
+class PopularMoviePagingSource(private val apiService: ApiService): PagingSource<Int, Movie>()  {
+
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
     }
-
-    override fun getRefreshKey(state: PagingState<Int, TvSeries>): Int? {
-        return state.anchorPosition?.let { anchorPostion ->
-            val anchorPage = state.closestPageToPosition(anchorPostion)
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
 
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TvSeries> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val page = params.key ?: INITIAL_PAGE_INDEX
+            val genreList = apiService.movieListGenres().genres  //1. Fetch List<Genres>
 
-            val emptyGenreList = listOf<String>()
-            val dataMapped = apiService.discoverTvShow(page= page).results.map {
-                DataMapper.mapTvShowResponseToDomain(it,emptyGenreList)
+            val idToMap = genreList.associateBy { it.id }
+            val dataMapped = apiService.getPopularMovie(page= page).results.map {
+                val listOfGenre = it.genreIds.mapNotNull{id->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+                DataMapper.mapMovieResponseToDomain(it,listOfGenre)
             }
 
             val nextKey =
@@ -47,4 +51,5 @@ class DiscoverTvSeriesPagingSource(private val apiService: ApiService): PagingSo
             return LoadResult.Error(Throwable(e.message))
         }
     }
+
 }

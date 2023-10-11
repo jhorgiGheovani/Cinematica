@@ -17,11 +17,14 @@ class MovieRepository(
     private val remoteDataSource: RemoteDataSource,
 ) : IMovieRepository {
     override fun getPopularMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getPopularMovie()
+    override fun getPopularMovieWithPaging(): Flow<PagingData<Movie>> = remoteDataSource.getPopularMovieWithPaging()
+
     override fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getTopRatedMovie()
 
     override fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getNowPlayingMovie()
 
     override fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = remoteDataSource.getPopularTvShow()
+    override fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>> = remoteDataSource.getPopularTvShowWithPaging()
 
     override fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = remoteDataSource.getTopRatedTvShows()
 

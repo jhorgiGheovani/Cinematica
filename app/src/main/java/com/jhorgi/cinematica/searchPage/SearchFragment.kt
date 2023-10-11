@@ -13,19 +13,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jhorgi.cinematica.R
 import com.jhorgi.cinematica.commonAdapter.movieListAdapterV1.MovieListAdapterV1
-import com.jhorgi.cinematica.commonAdapter.tvListAdapter.TvListAdapter
+import com.jhorgi.cinematica.commonAdapter.tvSeriesListAdapterV1.TvSeriesListAdapterV1
 import com.jhorgi.cinematica.core.data.Resource
 import com.jhorgi.cinematica.databinding.FragmentSearchBinding
 import com.jhorgi.cinematica.details.DetailsActivity
 import com.jhorgi.cinematica.searchPage.adapter.SearchResultSectionsPagerAdapter
 import com.jhorgi.cinematica.seeAllPages.SeeAllActivity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import com.jhorgi.cinematica.seeAllPages.SeeAllActivity.Companion.TYPE_TITTLE_DATA
+import com.jhorgi.cinematica.seeAllPages.SeeAllContentFragment
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@FlowPreview
-@ExperimentalCoroutinesApi
+//@FlowPreview
+//@ExperimentalCoroutinesApi
 class SearchFragment : Fragment() {
     private val searchPageViewModel: SearchPageViewModel by viewModel()
 
@@ -62,7 +62,7 @@ class SearchFragment : Fragment() {
         //Enter to see all page when user click see all pages
         binding.discoverContentLayout.seeAllLabel.setOnClickListener {
             val intent = Intent(activity, SeeAllActivity::class.java)
-            intent.putExtra(TYPE_TITTLE_DATA, DISCOVER)
+            intent.putExtra(TYPE_TITTLE_DATA, SeeAllContentFragment.DISCOVERY)
             startActivity(intent)
         }
 
@@ -184,7 +184,7 @@ class SearchFragment : Fragment() {
         searchPageViewModel.discoverTvList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    val tvShowAdapter = TvListAdapter(it.data) { clickTvShow ->
+                    val tvShowAdapter = TvSeriesListAdapterV1(it.data) { clickTvShow ->
                         val intent = Intent(activity, DetailsActivity::class.java)
                         intent.putExtra(DetailsActivity.EXTRA_DATA, clickTvShow.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.TV_SERIES_TYPE)
@@ -208,10 +208,6 @@ class SearchFragment : Fragment() {
 
 
     companion object {
-        const val TYPE_TITTLE_DATA = "type_data"
-        const val DISCOVER = "Discover"
-        const val TRENDING = "Trending"
-
         @StringRes
         private val TAB_TITLES = intArrayOf(
             R.string.tab_text_1,

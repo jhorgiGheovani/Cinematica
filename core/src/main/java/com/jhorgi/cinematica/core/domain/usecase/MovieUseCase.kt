@@ -14,11 +14,15 @@ interface MovieUseCase {
 
     fun getPopularMovie(): Flow<Resource<List<Movie>>>
 
+    fun getPopularMovieWithPaging(): Flow<PagingData<Movie>>
+
     fun getTopRatedMovie(): Flow<Resource<List<Movie>>>
 
     fun getNowPlayingMovie(): Flow<Resource<List<Movie>>>
 
     fun getPopularTvShow(): Flow<Resource<List<TvSeries>>>
+
+    fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>>
 
     fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>>
     fun movieSearch(query:String): Flow<Resource<List<Movie>>>

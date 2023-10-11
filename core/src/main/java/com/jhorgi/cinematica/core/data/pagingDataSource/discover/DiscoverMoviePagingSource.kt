@@ -1,4 +1,4 @@
-package com.jhorgi.cinematica.core.data.pagingDataSource
+package com.jhorgi.cinematica.core.data.pagingDataSource.discover
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -13,8 +13,8 @@ class DiscoverMoviePagingSource(private val apiService: ApiService): PagingSourc
     }
 
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-       return state.anchorPosition?.let { anchorPostion ->
-           val anchorPage = state.closestPageToPosition(anchorPostion)
+       return state.anchorPosition?.let { anchorPosition ->
+           val anchorPage = state.closestPageToPosition(anchorPosition)
 
            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
        }

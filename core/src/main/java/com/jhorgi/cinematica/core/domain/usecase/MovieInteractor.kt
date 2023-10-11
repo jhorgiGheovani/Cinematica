@@ -15,14 +15,15 @@ import kotlinx.coroutines.flow.flowOn
 
 class MovieInteractor(private val movieRepository: IMovieRepository) : MovieUseCase {
 
-//    override fun tvListGenres(): Flow<Resource<List<Genres>>> = movieRepository.tvListGenres()
-
     override fun getPopularMovie(): Flow<Resource<List<Movie>>> =movieRepository.getPopularMovie()
+    override fun getPopularMovieWithPaging(): Flow<PagingData<Movie>> = movieRepository.getPopularMovieWithPaging()
+
     override fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = movieRepository.getTopRatedMovie()
 
     override fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = movieRepository.getNowPlayingMovie()
 
     override fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = movieRepository.getPopularTvShow()
+    override fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>> = movieRepository.getPopularTvShowWithPaging()
 
     override fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = movieRepository.getTopRatedTvShows()
 

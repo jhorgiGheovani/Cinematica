@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jhorgi.cinematica.R
 import com.jhorgi.cinematica.databinding.ActivitySeeAllBinding
-import com.jhorgi.cinematica.searchPage.SearchFragment
 
 class SeeAllActivity : AppCompatActivity() {
 
@@ -23,7 +22,7 @@ class SeeAllActivity : AppCompatActivity() {
 
         binding = ActivitySeeAllBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val dataTittle = intent.getStringExtra(SearchFragment.TYPE_TITTLE_DATA)
+        val dataTittle = intent.getStringExtra(TYPE_TITTLE_DATA)
 
         window?.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
         //support action setting
@@ -42,7 +41,7 @@ class SeeAllActivity : AppCompatActivity() {
         val viewPager = binding.viewPager
 
 
-        val sectionPagerAdapter = SectionsPagerSeeAllPagesAdapter(this)
+        val sectionPagerAdapter = SectionsPagerSeeAllPagesAdapter(this, dataTittle.toString())
         viewPager.adapter = sectionPagerAdapter
 
 
@@ -54,6 +53,7 @@ class SeeAllActivity : AppCompatActivity() {
 
 
     companion object {
+        const val TYPE_TITTLE_DATA = "type_data"
         @StringRes
         private val TAB_TITLES = intArrayOf(
             R.string.tab_text_1,

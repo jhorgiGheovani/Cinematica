@@ -11,16 +11,17 @@ import com.jhorgi.cinematica.core.domain.model.TvSeriesDetails
 import kotlinx.coroutines.flow.Flow
 
 interface IMovieRepository {
-
-//    fun tvListGenres(): Flow<Resource<List<Genres>>>
-
     fun getPopularMovie(): Flow<Resource<List<Movie>>>
+
+    fun getPopularMovieWithPaging(): Flow<PagingData<Movie>>
 
     fun getTopRatedMovie(): Flow<Resource<List<Movie>>>
 
     fun getNowPlayingMovie(): Flow<Resource<List<Movie>>>
 
     fun getPopularTvShow(): Flow<Resource<List<TvSeries>>>
+
+    fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>>
 
     fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>>
 

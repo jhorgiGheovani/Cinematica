@@ -1,6 +1,7 @@
 package com.jhorgi.cinematica.seeAllPages
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,10 +38,14 @@ class SeeAllContentFragment : Fragment() {
 
 
         val index = arguments?.getInt(ARG_SECTION_NUMBER,0)
+        val type = arguments?.getString(ARG_TYPE)
+
+        Log.d("tipe", type.toString())
 
 
         if(index==1){
             val moviePagingAdapter = MoviePagingAdapter()
+
             binding.rvSeeAllFragment.adapter = moviePagingAdapter.withLoadStateHeaderAndFooter(
                 footer = LoadingStateAdapter{
                     moviePagingAdapter.retry()
@@ -50,11 +55,21 @@ class SeeAllContentFragment : Fragment() {
                 }
             )
 
-            viewLifecycleOwner.lifecycleScope.launch {
-                seeAllPagesViewModel.discoverMovie.collectLatest { resourcePagingData->
-                    moviePagingAdapter.submitData(resourcePagingData)
+            if(type == DISCOVERY){
+                viewLifecycleOwner.lifecycleScope.launch {
+                    seeAllPagesViewModel.discoverMovie.collectLatest { resourcePagingData->
+                        moviePagingAdapter.submitData(resourcePagingData)
+                    }
                 }
             }
+            if(type == POPULAR){
+                viewLifecycleOwner.lifecycleScope.launch {
+                    seeAllPagesViewModel.popularMovie.collectLatest { resourcePagingData->
+                        moviePagingAdapter.submitData(resourcePagingData)
+                    }
+                }
+            }
+
 
             with(binding.rvSeeAllFragment){
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -74,11 +89,21 @@ class SeeAllContentFragment : Fragment() {
                 }
             )
 
-            viewLifecycleOwner.lifecycleScope.launch {
-                seeAllPagesViewModel.discoverTvSeries.collectLatest { resourcePagingData->
-                    tvSeriesPagingAdapter.submitData(resourcePagingData)
+            if(type == DISCOVERY){
+                viewLifecycleOwner.lifecycleScope.launch {
+                    seeAllPagesViewModel.discoverTvSeries.collectLatest { resourcePagingData->
+                        tvSeriesPagingAdapter.submitData(resourcePagingData)
+                    }
                 }
             }
+            if(type == POPULAR){
+                viewLifecycleOwner.lifecycleScope.launch{
+                    seeAllPagesViewModel.popularTvShow.collectLatest { resourcePagingData->
+                        tvSeriesPagingAdapter.submitData(resourcePagingData)
+                    }
+                }
+            }
+
 
             with(binding.rvSeeAllFragment){
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -94,6 +119,10 @@ class SeeAllContentFragment : Fragment() {
 
     companion object {
         const val ARG_SECTION_NUMBER = "section_number"
+        const val ARG_TYPE = "type_of_list"
+        const val DISCOVERY= "Discovery"
+        const val POPULAR = "Popular"
+        const val UPCOMING = "Up Coming"
     }
 
 
