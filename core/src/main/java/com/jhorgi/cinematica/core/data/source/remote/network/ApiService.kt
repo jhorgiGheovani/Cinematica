@@ -55,22 +55,22 @@ interface ApiService {
 
     @GET("movie/{movieId}")
     suspend fun getMovieDetails(
-        @Path("movie_id") movieId: Int
+        @Path("movieId") movieId: Int
     ): MovieDetailsResponse
 
     @GET("tv/{seriesId}")
     suspend fun getTvDetails(
-        @Path("series_id") seriesId: Int
+        @Path("seriesId") seriesId: Int
     ): TvDetailsResponse
 
     @GET("movie/{movieId}/credits")
     suspend fun getMovieCredits(
-        @Path("movie_id") movieId: Int
+        @Path("movieId") movieId: Int
     ): CreditsResponse
 
     @GET("tv/{seriesId}/aggregate_credits")
     suspend fun getSeriesCredits(
-        @Path("series_id") seriesId: Int
+        @Path("seriesId") seriesId: Int
     ): CreditsResponse
 
     @GET("discover/movie")
@@ -84,18 +84,18 @@ interface ApiService {
     suspend fun discoverTvShow(
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1,
-        @Query("sort_by") sortBy: String = "popularity.desc"
+        @Query("sortBy") sortBy: String = "popularity.desc"
     ): TvListResponse
 
     @GET("trending/movie/{timeWindow}")
     suspend fun getTrendingMovie(
-        @Path("time_window") timeWindow: String = "week",
+        @Path("timeWindow") timeWindow: String = "week",
         @Query("page") page: Int = 1,
     ): ListMovieResponse
 
     @GET("trending/tv/{timeWindow}")
     suspend fun getTrendingTvSeries(
-        @Path("time_window") timeWindow: String = "week",
+        @Path("timeWindow") timeWindow: String = "week",
         @Query("page") page: Int = 1,
     ): TvListResponse
 

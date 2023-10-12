@@ -44,6 +44,7 @@ class DetailsActivity : AppCompatActivity() {
             }
         }
 
+
         if (typeData == MOVIE_TYPE) {
             detailMovieViewModel.isFavoriteItem(movieId)
             detailMovieViewModel.getMovieCast(movieId)
