@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingTop="25dp"
     tools:context=".searchPage.SearchFragment">
 
@@ -78,10 +72,10 @@
     <FrameLayout
         android:id="@+id/discoveryContentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchView">
+        app:layout_constraintTop_toBottomOf="@id/searchView"
+        app:layout_constraintBottom_toBottomOf="parent">
         <include
             android:id="@+id/discoverContentLayout"
             layout="@layout/discovery_content" />
@@ -91,10 +85,10 @@
     <FrameLayout
         android:id="@+id/searchResultsContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchView">
+        app:layout_constraintTop_toBottomOf="@id/searchView"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <include
             android:id="@+id/searchResultLayout"
@@ -102,4 +96,3 @@
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>

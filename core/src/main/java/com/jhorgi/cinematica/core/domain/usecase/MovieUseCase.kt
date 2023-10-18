@@ -27,6 +27,8 @@ interface MovieUseCase {
     fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>>
     fun movieSearch(query:String): Flow<Resource<List<Movie>>>
 
+    fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>>
+
     fun getUpComingMovie(): Flow<Resource<List<Movie>>>
     fun discoverMovie(): Flow<Resource<List<Movie>>>
 

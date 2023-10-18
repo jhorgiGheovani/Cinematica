@@ -21,11 +21,13 @@ import com.jhorgi.cinematica.searchPage.adapter.SearchResultSectionsPagerAdapter
 import com.jhorgi.cinematica.seeAllPages.SeeAllActivity
 import com.jhorgi.cinematica.seeAllPages.SeeAllActivity.Companion.TYPE_TITTLE_DATA
 import com.jhorgi.cinematica.seeAllPages.SeeAllContentFragment
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-//@FlowPreview
-//@ExperimentalCoroutinesApi
+@FlowPreview
+@ExperimentalCoroutinesApi
 class SearchFragment : Fragment() {
     private val searchPageViewModel: SearchPageViewModel by viewModel()
 
@@ -43,7 +45,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        //Discover Movie and Tv Shoe
         val discoverMovieLayoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.discoverContentLayout.movieDiscoverRV.layoutManager = discoverMovieLayoutManager
@@ -51,9 +53,6 @@ class SearchFragment : Fragment() {
         val discoverTvShowLayoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.discoverContentLayout.tvShowDiscoverRV.layoutManager = discoverTvShowLayoutManager
-
-//        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-//        binding.searchResultLayout.rv.layoutManager = layoutManager
 
 
         searchPageViewModel.getDiscoverMovieList()
@@ -66,6 +65,25 @@ class SearchFragment : Fragment() {
             startActivity(intent)
         }
 
+
+        val viewPager = binding.searchResultLayout.viewPager
+
+        lifecycleScope.launch {
+            searchPageViewModel.queryChannel.collect {
+                val sectionsPagerAdapter = SearchResultSectionsPagerAdapter(
+                    requireActivity(),
+                    it
+                )
+                viewPager.adapter = sectionsPagerAdapter
+            }
+        }
+
+
+        val tabs = binding.searchResultLayout.tabs
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
+
         fetchDiscoverMovies()
         fetchDiscoverTvSeries()
 
@@ -73,49 +91,11 @@ class SearchFragment : Fragment() {
 
 
 
-
-//        searchPageViewModel.searchResult.observe(viewLifecycleOwner) {
-//            lifecycleScope.launch {
-//                it.collect { data ->
-//                    when (data) {
-//                        is Resource.Success -> {
-////                            binding.discoverContentLayout2.textView2.text = data.data.toString()
-//                            Toast.makeText(
-//                                context,
-//                                data.data[0].movieId.toString(),
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            val adapter = SearchResultAdapter(data.data) { clickMovie ->
-//                                val intent = Intent(activity, DetailsActivity::class.java)
-//                                intent.putExtra(DetailsActivity.EXTRA_DATA, clickMovie.movieId)
-//                                intent.putExtra(
-//                                    DetailsActivity.TYPE_DATA,
-//                                    DetailsActivity.MOVIE_TYPE
-//                                )
-//                                startActivity(intent)
-//                            }
-//
-//                            binding.searchResultLayout.rv.adapter = adapter
-//
-//                        }
-//
-//                        is Resource.Error -> {
-////                            Toast.makeText(context,"enter error", Toast.LENGTH_LONG).show()
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
-
-
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 //when user click submit in search
-                lifecycleScope.launch {
-                    searchPageViewModel.queryChannel.value = query.toString()
-                }
+                searchPageViewModel.queryChannel.value = query.toString()
                 return true
             }
 
@@ -123,29 +103,17 @@ class SearchFragment : Fragment() {
                 if (newText.isNotEmpty()) {
                     binding.discoveryContentContainer.visibility = View.GONE
                     binding.searchResultsContainer.visibility = View.VISIBLE
-                    //tab layout
-
-
-
-                    val sectionsPagerAdapter = SearchResultSectionsPagerAdapter(requireActivity())
-                    val viewPager = binding.searchResultLayout.viewPager
-                    viewPager.adapter = sectionsPagerAdapter
-
-                    val tabs = binding.searchResultLayout.tabs
-                    TabLayoutMediator(tabs,viewPager){tab,position ->
-                        tab.text = resources.getString(TAB_TITLES[position])
-                    }.attach()
-
-
                 } else {
                     binding.discoveryContentContainer.visibility = View.VISIBLE
                     binding.searchResultsContainer.visibility = View.GONE
                 }
 
                 //when user typing
-                lifecycleScope.launch {
-                    searchPageViewModel.queryChannel.value = newText
-                }
+                searchPageViewModel.queryChannel.value = newText
+
+
+
+
                 return true
             }
         })

@@ -11,6 +11,7 @@ import com.jhorgi.cinematica.core.domain.model.FavoriteItem
 import com.jhorgi.cinematica.core.domain.model.GenresItem
 import com.jhorgi.cinematica.core.domain.model.Movie
 import com.jhorgi.cinematica.core.domain.model.MovieDetails
+import com.jhorgi.cinematica.core.domain.model.RecyclerViewDataList2
 import com.jhorgi.cinematica.core.domain.model.TvSeries
 import com.jhorgi.cinematica.core.domain.model.TvSeriesDetails
 
@@ -145,6 +146,30 @@ object DataMapper {
                 name = it.name,
                 positionOrCharacter = it.character,
                 imagesPath = it.profilePath
+            )
+        }
+
+    fun mapMovieToRecyclerViewDataList2(input: List<Movie>) =
+        input.map {
+            RecyclerViewDataList2(
+                id = it.movieId,
+                tittle = it.title,
+                posterPath= it.posterPath,
+                overview = it.overview,
+                releaseDate = it.releaseDate,
+                genres = it.genres
+            )
+        }
+
+    fun mapTvSeriesToRecyclerViewDataList2(input: List<TvSeries>) =
+        input.map {
+            RecyclerViewDataList2(
+                id = it.id!!,
+                tittle = it.title!!,
+                posterPath= it.posterPath,
+                overview = it.overview!!,
+                releaseDate = it.firstAirDate,
+                genres = it.genres
             )
         }
 

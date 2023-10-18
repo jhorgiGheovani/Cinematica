@@ -33,18 +33,18 @@ class RemoteDataSource(private val apiService: ApiService) {
             val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
 
             val response = apiService.getPopularMovie().results.map {
-                val listOfGenre = it.genreIds.mapNotNull{id->
+                val listOfGenre = it.genreIds.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
-                DataMapper.mapMovieResponseToDomain(it,listOfGenre)
+                DataMapper.mapMovieResponseToDomain(it, listOfGenre)
             }
-          emit(Resource.Success(response))
+            emit(Resource.Success(response))
         } catch (e: Exception) {
             emit(Resource.Error(e.message.toString()))
         }
     }
 
-    fun getPopularMovieWithPaging(): Flow<PagingData<Movie>>{
+    fun getPopularMovieWithPaging(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
                 pageSize = NETWORK_PAGE_SIZE,
@@ -59,14 +59,14 @@ class RemoteDataSource(private val apiService: ApiService) {
     fun getUpComingMovie(): Flow<Resource<List<Movie>>> = flow {
         try {
 
-            val response = apiService.getUpComingMovie().results.map{ data->
+            val response = apiService.getUpComingMovie().results.map { data ->
 
                 val emptyList = listOf<String>()
                 DataMapper.mapMovieResponseToDomain(data, emptyList)
             }
             emit(Resource.Success(response))
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
             emit(Resource.Error(e.message.toString()))
         }
     }
@@ -81,7 +81,7 @@ class RemoteDataSource(private val apiService: ApiService) {
 
             val response = apiService.getTopRatedMovie().results.map { data ->
 
-                val listOfGenre = data.genreIds.mapNotNull{id->
+                val listOfGenre = data.genreIds.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
 
@@ -101,11 +101,11 @@ class RemoteDataSource(private val apiService: ApiService) {
             val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
 
             val response = apiService.getNowPlayingMovie().results.map { data ->
-                val listOfGenre = data.genreIds.mapNotNull{id->
+                val listOfGenre = data.genreIds.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
 
-                DataMapper.mapMovieResponseToDomain(data,listOfGenre)
+                DataMapper.mapMovieResponseToDomain(data, listOfGenre)
             }
             emit(Resource.Success(response))
         } catch (e: Exception) {
@@ -119,11 +119,11 @@ class RemoteDataSource(private val apiService: ApiService) {
             val genre = apiService.tvListGenres().genres
             val idToMap = genre.associateBy { it.id }
             val response = apiService.getPopularTvShow().results.map { data ->
-                val listOfGenre = data.genreIds?.mapNotNull{id->
+                val listOfGenre = data.genreIds?.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
 
-                DataMapper.mapTvShowResponseToDomain(data,listOfGenre!!)
+                DataMapper.mapTvShowResponseToDomain(data, listOfGenre!!)
             }
             emit(Resource.Success(response))
 
@@ -150,11 +150,11 @@ class RemoteDataSource(private val apiService: ApiService) {
             val genre = apiService.tvListGenres().genres
             val idToMap = genre.associateBy { it.id }
             val response = apiService.getPopularTvShow().results.map { data ->
-                val listOfGenre = data.genreIds?.mapNotNull{id->
+                val listOfGenre = data.genreIds?.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
 
-                DataMapper.mapTvShowResponseToDomain(data,listOfGenre!!)
+                DataMapper.mapTvShowResponseToDomain(data, listOfGenre!!)
             }
             emit(Resource.Success(response))
 
@@ -236,7 +236,7 @@ class RemoteDataSource(private val apiService: ApiService) {
             val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
 
             val response = apiService.discoverMovie().results.map {
-                val listOfGenre = it.genreIds.mapNotNull{id->
+                val listOfGenre = it.genreIds.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
                 DataMapper.mapMovieResponseToDomain(it, listOfGenre)
@@ -279,7 +279,7 @@ class RemoteDataSource(private val apiService: ApiService) {
 
             val response = apiService.discoverTvShow().results.map {
 
-                val listOfGenre = it.genreIds?.mapNotNull{id->
+                val listOfGenre = it.genreIds?.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
 
@@ -300,19 +300,43 @@ class RemoteDataSource(private val apiService: ApiService) {
             val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
 
             val response = apiService.moviesSearch(query).results.map {
-                val listOfGenre = it.genreIds.mapNotNull{id->
+                val listOfGenre = it.genreIds.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
 
                 DataMapper.mapMovieResponseToDomain(it, listOfGenre)
             }
-            if (response.isNotEmpty()) {
-                emit(Resource.Success(response))
-            }
+
+            emit(Resource.Success(response))
+
 
         } catch (e: Exception) {
             emit(Resource.Error(e.message.toString()))
         }
     }
+
+    fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>> = flow {
+        try {
+
+            val genreList = apiService.tvListGenres().genres  //1. Fetch List<Genres>
+
+            val idToMap = genreList.associateBy { it.id }   //2. use associateBy to get id key
+
+            val response = apiService.tvSearch(query).results.map {
+                val listOfGenre = it.genreIds?.mapNotNull { id ->
+                    idToMap[id]?.name  //3. map the List<Id> to id key
+                }
+
+                DataMapper.mapTvShowResponseToDomain(it, listOfGenre!!)
+            }
+
+            emit(Resource.Success(response))
+
+
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
+    }
+
 
 }

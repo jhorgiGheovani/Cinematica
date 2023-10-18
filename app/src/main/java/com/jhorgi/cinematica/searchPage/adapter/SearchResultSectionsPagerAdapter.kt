@@ -10,7 +10,7 @@ import kotlinx.coroutines.FlowPreview
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SearchResultSectionsPagerAdapter(activity: FragmentActivity) :
+class SearchResultSectionsPagerAdapter(activity: FragmentActivity, private val query: String) :
     FragmentStateAdapter(activity) {
     override fun getItemCount(): Int = 2
 
@@ -18,12 +18,14 @@ class SearchResultSectionsPagerAdapter(activity: FragmentActivity) :
         val fragment = SearchFragmentContent()
         fragment.arguments = Bundle().apply {
             putInt(ARG_SECTION_NUMBER, position + 1)
+            putString(QUERY, query)
         }
         return fragment
     }
 
     companion object {
         const val ARG_SECTION_NUMBER = "section_number"
+        const val QUERY = "query"
     }
 }
 

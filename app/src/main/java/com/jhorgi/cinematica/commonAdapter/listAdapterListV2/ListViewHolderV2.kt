@@ -1,17 +1,17 @@
-package com.jhorgi.cinematica.searchPage.adapter
+package com.jhorgi.cinematica.commonAdapter.listAdapterListV2
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.jhorgi.cinematica.R
-import com.jhorgi.cinematica.core.domain.model.Movie
+import com.jhorgi.cinematica.core.domain.model.RecyclerViewDataList2
 import com.jhorgi.cinematica.databinding.ItemFavoriteBinding
 
-class SearchResultViewHolder(
+class ListViewHolderV2(
     private val binding: ItemFavoriteBinding,
-    private val onItemClick: (Movie) -> Unit
-): RecyclerView.ViewHolder(binding.root) {
+    private val onItemClick: (RecyclerViewDataList2)-> Unit
+):RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(data: Movie){
+    fun bind(data: RecyclerViewDataList2){
 
 
         if(data.posterPath!=null){
@@ -23,14 +23,17 @@ class SearchResultViewHolder(
         }
 
 
-        binding.tittleTV.text = data.title
+        binding.tittleTV.text = data.tittle
         if(data.overview!=""){
             binding.descTV.text = data.overview
         }
-        binding.runTimeTV.text = data.releaseDate.split("-")[0]
+
+            binding.runTimeTV.text = data.releaseDate?.split("-")?.get(0) ?: "no release date"
 
 
-        binding.genres.text = data.genres.joinToString (", ")
+
+
+        binding.genres.text = data.genres?.joinToString (", ")
         itemView.setOnClickListener { onItemClick(data) }
     }
 }

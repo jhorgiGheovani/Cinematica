@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 
 class SearchPageViewModel(private val movieUseCase: MovieUseCase) : ViewModel() {
@@ -32,16 +32,38 @@ class SearchPageViewModel(private val movieUseCase: MovieUseCase) : ViewModel() 
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    val searchResult = queryChannel
-        .debounce(300)
-        .distinctUntilChanged()
-        .filter {
-            it.trim().isNotEmpty()
-        }
-        .mapLatest {
-            movieUseCase.movieSearch(it)
-        }
-        .asLiveData()
+    fun getSearchResult(query: String): LiveData<Resource<List<Movie>>> {
+        queryChannel.value = query
+        return queryChannel
+            .debounce(300)
+            .filter {
+                it.trim().isNotEmpty()
+            }
+            .distinctUntilChanged()
+            .flatMapLatest {
+                movieUseCase.movieSearch(it)
+            }
+            .asLiveData()
+    }
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    fun getTvSeriesSearchResult(query: String): LiveData<Resource<List<TvSeries>>> {
+        queryChannel.value = query
+        return queryChannel
+            .debounce(300)
+            .filter {
+                it.trim().isNotEmpty()
+            }
+            .distinctUntilChanged()
+            .flatMapLatest {
+                movieUseCase.tvSeriesSearch(it)
+            }
+            .asLiveData()
+    }
+
+
+ 
 
     fun getDiscoverMovieList() {
         movieUseCase.discoverMovie()

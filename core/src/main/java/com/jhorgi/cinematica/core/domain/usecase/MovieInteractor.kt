@@ -28,6 +28,8 @@ class MovieInteractor(private val movieRepository: IMovieRepository) : MovieUseC
     override fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = movieRepository.getTopRatedTvShows()
 
     override fun movieSearch(query: String): Flow<Resource<List<Movie>>> = movieRepository.movieSearch(query)
+    override fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>> = movieRepository.tvSeriesSearch(query)
+
     override fun getUpComingMovie(): Flow<Resource<List<Movie>>> = movieRepository.getUpComingMovie()
 
     override fun discoverMovie(): Flow<Resource<List<Movie>>> = movieRepository.discoverMovie()

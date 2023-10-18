@@ -104,4 +104,11 @@ interface ApiService {
         @Query("query") query: String
     ):ListMovieResponse
 
+    @GET("search/tv")
+    suspend fun tvSearch(
+        @Query("query") query: String
+    ):TvListResponse
+
+
+
 }
