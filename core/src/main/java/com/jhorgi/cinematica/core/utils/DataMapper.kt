@@ -11,6 +11,7 @@ import com.jhorgi.cinematica.core.domain.model.FavoriteItem
 import com.jhorgi.cinematica.core.domain.model.GenresItem
 import com.jhorgi.cinematica.core.domain.model.Movie
 import com.jhorgi.cinematica.core.domain.model.MovieDetails
+import com.jhorgi.cinematica.core.domain.model.RecyclerViewDataList1
 import com.jhorgi.cinematica.core.domain.model.RecyclerViewDataList2
 import com.jhorgi.cinematica.core.domain.model.TvSeries
 import com.jhorgi.cinematica.core.domain.model.TvSeriesDetails
@@ -149,12 +150,32 @@ object DataMapper {
             )
         }
 
+    fun mapMovieToRecyclerViewDataList1(input: List<Movie>) =
+        input.map {
+            RecyclerViewDataList1(
+                id = it.movieId,
+                tittle = it.title,
+                posterPath = it.posterPath,
+                genres = it.genres
+            )
+        }
+
+    fun mapTvSeriesToRecyclerViewDataList1(input: List<TvSeries>) =
+        input.map {
+            RecyclerViewDataList1(
+                id = it.id,
+                tittle = it.title,
+                posterPath = it.posterPath,
+                genres = it.genres
+            )
+        }
+
     fun mapMovieToRecyclerViewDataList2(input: List<Movie>) =
         input.map {
             RecyclerViewDataList2(
                 id = it.movieId,
                 tittle = it.title,
-                posterPath= it.posterPath,
+                posterPath = it.posterPath,
                 overview = it.overview,
                 releaseDate = it.releaseDate,
                 genres = it.genres
@@ -164,14 +185,27 @@ object DataMapper {
     fun mapTvSeriesToRecyclerViewDataList2(input: List<TvSeries>) =
         input.map {
             RecyclerViewDataList2(
-                id = it.id!!,
-                tittle = it.title!!,
-                posterPath= it.posterPath,
+                id = it.id,
+                tittle = it.title,
+                posterPath = it.posterPath,
                 overview = it.overview!!,
                 releaseDate = it.firstAirDate,
                 genres = it.genres
             )
         }
 
+    fun mapFavoriteItemToRecyclerViewDataList2(input: List<FavoriteItem>) =
+        input.map {
+            val genre = it.genres?.map { data -> data.name }
+            RecyclerViewDataList2(
+                id = it.id,
+                tittle = it.title,
+                posterPath = it.posterPath,
+                overview = it.overview,
+                releaseDate = it.releaseDate,
+                genres = genre
+            )
+
+        }
 
 }

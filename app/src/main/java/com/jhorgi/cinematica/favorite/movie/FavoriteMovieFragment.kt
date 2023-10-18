@@ -7,10 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jhorgi.cinematica.commonAdapter.listAdapterListV2.ListAdapterV2
+import com.jhorgi.cinematica.core.utils.DataMapper
 import com.jhorgi.cinematica.databinding.FragmentFavoriteMovieBinding
 import com.jhorgi.cinematica.details.DetailsActivity
 import com.jhorgi.cinematica.favorite.FavoriteViewModel
-import com.jhorgi.cinematica.favorite.adapter.FavoriteAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -39,7 +40,8 @@ class FavoriteItemFragment : Fragment() {
         favoriteViewModel.getListOfFavoriteItem(DetailsActivity.MOVIE_TYPE)
 
         favoriteViewModel.favoriteItem.observe(viewLifecycleOwner){
-            val adapter = FavoriteAdapter(it){clickMovie->
+            val data = DataMapper.mapFavoriteItemToRecyclerViewDataList2(it)
+            val adapter = ListAdapterV2(data){clickMovie->
                 val intent = Intent(activity, DetailsActivity::class.java)
                 intent.putExtra(DetailsActivity.EXTRA_DATA, clickMovie.id)
                 intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.MOVIE_TYPE)

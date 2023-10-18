@@ -7,12 +7,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jhorgi.cinematica.commonAdapter.movieListAdapterV1.MovieListAdapterV1
-import com.jhorgi.cinematica.commonAdapter.tvSeriesListAdapterV1.TvSeriesListAdapterV1
+import com.google.android.material.snackbar.Snackbar
+import com.jhorgi.cinematica.commonAdapter.listAdapterV1.ListAdapterV1
 import com.jhorgi.cinematica.core.data.Resource
+import com.jhorgi.cinematica.core.utils.DataMapper
 import com.jhorgi.cinematica.databinding.FragmentHomeBinding
 import com.jhorgi.cinematica.details.DetailsActivity
 import com.jhorgi.cinematica.home.imagesSliderAdapter.ImagesSliideAdapter
@@ -89,7 +89,7 @@ class HomeFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), upComingMovie.error, Toast.LENGTH_SHORT).show()
+                    view?.let { it1 -> Snackbar.make(it1, upComingMovie.error, Snackbar.LENGTH_SHORT).show() }
                 }
             }
         }
@@ -104,9 +104,11 @@ class HomeFragment : Fragment() {
         homeViewModel.popularMovie.observe(viewLifecycleOwner) { popularMovie ->
             when (popularMovie) {
                 is Resource.Success -> {
-                    val popularMovieAdapter = MovieListAdapterV1(popularMovie.data) { onclick ->
+
+                    val data  = DataMapper.mapMovieToRecyclerViewDataList1(popularMovie.data)
+                    val popularMovieAdapter = ListAdapterV1(data) { onclick ->
                         val intent = Intent(activity, DetailsActivity::class.java)
-                        intent.putExtra(DetailsActivity.EXTRA_DATA, onclick.movieId)
+                        intent.putExtra(DetailsActivity.EXTRA_DATA, onclick.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.MOVIE_TYPE)
                         startActivity(intent)
                     }
@@ -116,7 +118,7 @@ class HomeFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    Toast.makeText(context, popularMovie.error, Toast.LENGTH_SHORT).show()
+                    view?.let { it1 -> Snackbar.make(it1, popularMovie.error, Snackbar.LENGTH_SHORT).show() }
                 }
             }
         }
@@ -130,7 +132,9 @@ class HomeFragment : Fragment() {
         homeViewModel.popularTvShow.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    val popularMovieAdapter = TvSeriesListAdapterV1(it.data) { onclick ->
+
+                    val tvShow = DataMapper.mapTvSeriesToRecyclerViewDataList1(it.data)
+                    val popularMovieAdapter = ListAdapterV1(tvShow) { onclick ->
                         val intent = Intent(activity, DetailsActivity::class.java)
                         intent.putExtra(DetailsActivity.EXTRA_DATA, onclick.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.TV_SERIES_TYPE)
@@ -141,7 +145,9 @@ class HomeFragment : Fragment() {
 
                 }
 
-                is Resource.Error -> {}
+                is Resource.Error -> {
+                    view?.let { it1 -> Snackbar.make(it1, it.error, Snackbar.LENGTH_SHORT).show() }
+                }
             }
         }
     }

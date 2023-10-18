@@ -24,7 +24,6 @@ class TvSeriesPagingAdapter: PagingDataAdapter<TvSeries, TvSeriesListPagingViewH
            )
        )
 
-//        holder.binding.
 
         return holder
     }

@@ -5,9 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TvSeriesDetails(
-    val id: Int? = null,
+    val id: Int,
     val posterPath: String? = null,
-    val title: String? = null,
+    val title: String,
     val overview: String? = "No overview",
     val genres: List<GenresItem>? = null,
     val originalTitle: String? = null,

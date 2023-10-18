@@ -50,10 +50,10 @@ data class TvResults(
 	val voteAverage: Any? = null,
 
 	@field:SerializedName("name")
-	val name: String? = null,
+	val name: String,
 
 	@field:SerializedName("id")
-	val id: Int? = null,
+	val id: Int,
 
 	@field:SerializedName("vote_count")
 	val voteCount: Int? = null

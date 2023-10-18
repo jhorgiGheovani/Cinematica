@@ -12,10 +12,10 @@ import kotlinx.parcelize.Parcelize
 data class MovieEntity(
     @PrimaryKey
     @ColumnInfo(name = "movieId")
-    var movieId: Int?=null,
+    var movieId: Int,
 
     @ColumnInfo(name = "tittle")
-    var title: String?=null,
+    var title: String,
 
     @ColumnInfo(name = "genres")
     var genres: List<GenresItem>?=null,

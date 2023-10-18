@@ -29,7 +29,7 @@ data class TvDetailsResponse(
 	val productionCountries: List<ProductionCountriesTvItem>? = null,
 
 	@field:SerializedName("id")
-	val id: Int? = null,
+	val id: Int,
 
 	@field:SerializedName("number_of_seasons")
 	val numberOfSeasons: Int? = null,
@@ -74,7 +74,7 @@ data class TvDetailsResponse(
 	val voteAverage: Double? = null,
 
 	@field:SerializedName("name")
-	val name: String? = null,
+	val name: String,
 
 	@field:SerializedName("tagline")
 	val tagline: String? = null,

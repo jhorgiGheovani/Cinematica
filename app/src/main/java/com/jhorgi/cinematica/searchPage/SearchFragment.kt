@@ -12,9 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jhorgi.cinematica.R
-import com.jhorgi.cinematica.commonAdapter.movieListAdapterV1.MovieListAdapterV1
-import com.jhorgi.cinematica.commonAdapter.tvSeriesListAdapterV1.TvSeriesListAdapterV1
+import com.jhorgi.cinematica.commonAdapter.listAdapterV1.ListAdapterV1
 import com.jhorgi.cinematica.core.data.Resource
+import com.jhorgi.cinematica.core.utils.DataMapper
 import com.jhorgi.cinematica.databinding.FragmentSearchBinding
 import com.jhorgi.cinematica.details.DetailsActivity
 import com.jhorgi.cinematica.searchPage.adapter.SearchResultSectionsPagerAdapter
@@ -128,9 +128,11 @@ class SearchFragment : Fragment() {
                 is Resource.Success -> {
                     binding.tvShowProgressBar.visibility = View.GONE
                     binding.discoveryContentContainer.visibility = View.VISIBLE
-                    val movieAdapter = MovieListAdapterV1(movie.data) { clickMovie ->
+                    val movieList = DataMapper.mapMovieToRecyclerViewDataList1(movie.data)
+
+                    val movieAdapter = ListAdapterV1(movieList) { clickMovie ->
                         val intent = Intent(activity, DetailsActivity::class.java)
-                        intent.putExtra(DetailsActivity.EXTRA_DATA, clickMovie.movieId)
+                        intent.putExtra(DetailsActivity.EXTRA_DATA, clickMovie.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.MOVIE_TYPE)
                         startActivity(intent)
                     }
@@ -152,7 +154,9 @@ class SearchFragment : Fragment() {
         searchPageViewModel.discoverTvList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    val tvShowAdapter = TvSeriesListAdapterV1(it.data) { clickTvShow ->
+
+                    val tvSeriesList = DataMapper.mapTvSeriesToRecyclerViewDataList1(it.data)
+                    val tvShowAdapter = ListAdapterV1(tvSeriesList) { clickTvShow ->
                         val intent = Intent(activity, DetailsActivity::class.java)
                         intent.putExtra(DetailsActivity.EXTRA_DATA, clickTvShow.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.TV_SERIES_TYPE)
