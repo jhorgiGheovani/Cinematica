@@ -8,5 +8,6 @@ data class RecyclerViewDataList1 (
     val id: Int,
     val tittle: String,
     val posterPath: String? = "",
-    val genres: List<String> ?= emptyList()
+    val genres: List<String> ?= emptyList(),
+    val rating: String
 ): Parcelable

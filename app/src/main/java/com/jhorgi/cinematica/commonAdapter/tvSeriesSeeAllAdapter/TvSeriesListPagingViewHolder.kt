@@ -19,6 +19,7 @@ class TvSeriesListPagingViewHolder(
             binding.descTV.text = data.overview
         }
         binding.genres.text = data.genres?.joinToString (", ")
+        binding.textStart.text = data.voteAverage.toString()
         binding.runTimeTV.text =
             data.firstAirDate?.split("-")?.get(0) ?: "release date not available"
     }

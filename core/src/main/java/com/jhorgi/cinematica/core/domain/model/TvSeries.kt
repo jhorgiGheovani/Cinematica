@@ -14,4 +14,5 @@ data class TvSeries(
     val posterPath: String? = null,
     val backdropPath: String? = null,
     val firstAirDate: String? = null,
+    val voteAverage: Double? =null
 ) : Parcelable

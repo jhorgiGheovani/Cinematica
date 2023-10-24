@@ -38,10 +38,14 @@ class FavoriteItemFragment : Fragment() {
         binding.rvFavoriteMovie.layoutManager = layoutManager
 
         favoriteViewModel.getListOfFavoriteItem(DetailsActivity.MOVIE_TYPE)
+        favoriteViewModel.favoriteItem.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.animationView.setAnimation("emptyFavoriteData.lottie")
+                binding.animationView.playAnimation()
+            }
 
-        favoriteViewModel.favoriteItem.observe(viewLifecycleOwner){
             val data = DataMapper.mapFavoriteItemToRecyclerViewDataList2(it)
-            val adapter = ListAdapterV2(data){clickMovie->
+            val adapter = ListAdapterV2(data) { clickMovie ->
                 val intent = Intent(activity, DetailsActivity::class.java)
                 intent.putExtra(DetailsActivity.EXTRA_DATA, clickMovie.id)
                 intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.MOVIE_TYPE)
@@ -49,9 +53,10 @@ class FavoriteItemFragment : Fragment() {
             }
             binding.rvFavoriteMovie.adapter = adapter
 
+
+        }
+
+
     }
 
-
-
-}
 }

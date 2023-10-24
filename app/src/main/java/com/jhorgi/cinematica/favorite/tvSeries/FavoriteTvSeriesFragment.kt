@@ -40,6 +40,11 @@ class FavoriteTvSeriesFragment : Fragment() {
         favoriteViewModel.getListOfFavoriteItem(DetailsActivity.TV_SERIES_TYPE)
 
         favoriteViewModel.favoriteItem.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.animationView.setAnimation("emptyFavoriteData.lottie")
+                binding.animationView.playAnimation()
+            }
+
             val data = DataMapper.mapFavoriteItemToRecyclerViewDataList2(it)
             val adapter = ListAdapterV2(data) { clickMovie ->
                 val intent = Intent(activity, DetailsActivity::class.java)

@@ -14,4 +14,6 @@ class SeeAllPagesViewModel(movieUseCase: MovieUseCase)  : ViewModel() {
     val popularMovie = movieUseCase.getPopularMovieWithPaging().cachedIn(viewModelScope)
 
     val popularTvShow = movieUseCase.getPopularTvShowWithPaging().cachedIn(viewModelScope)
+
+    val upcomingMovie = movieUseCase.getUpComingMovieWithPaging().cachedIn(viewModelScope)
 }

@@ -34,6 +34,7 @@ class ListViewHolderV2(
 
 
         binding.genres.text = data.genres?.joinToString (", ")
+        binding.textStart.text = data.rating
         itemView.setOnClickListener { onItemClick(data) }
     }
 }

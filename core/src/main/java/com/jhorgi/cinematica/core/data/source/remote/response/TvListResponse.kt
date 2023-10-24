@@ -47,7 +47,7 @@ data class TvResults(
 	val popularity: Any? = null,
 
 	@field:SerializedName("vote_average")
-	val voteAverage: Any? = null,
+	val voteAverage: Double? = null,
 
 	@field:SerializedName("name")
 	val name: String,

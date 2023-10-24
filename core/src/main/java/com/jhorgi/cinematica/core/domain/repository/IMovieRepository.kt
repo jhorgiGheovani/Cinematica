@@ -31,6 +31,8 @@ interface IMovieRepository {
 
     fun getUpComingMovie(): Flow<Resource<List<Movie>>>
 
+    fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>>
+
     fun discoverMovie(): Flow<Resource<List<Movie>>>
 
     fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>>

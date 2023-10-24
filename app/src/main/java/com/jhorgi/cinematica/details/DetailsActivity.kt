@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.imageLoader
 import coil.request.ImageRequest
+import com.google.android.material.snackbar.Snackbar
 import com.jhorgi.cinematica.R
 import com.jhorgi.cinematica.core.domain.model.FavoriteItem
 import com.jhorgi.cinematica.core.domain.model.MovieDetails
@@ -15,6 +16,7 @@ import com.jhorgi.cinematica.core.utils.DataMapper
 import com.jhorgi.cinematica.databinding.ActivityDetailsBinding
 import com.jhorgi.cinematica.details.adapter.CreditsAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.roundToLong
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -123,6 +125,8 @@ class DetailsActivity : AppCompatActivity() {
         //bind genres
         val genre = data.genres?.map { it.name }
         binding.discoverContentLayout.genres.text = genre?.joinToString(", ")
+        val roundedValue = (data.voteAverage.times(10)).roundToLong() / 10.0
+        binding.discoverContentLayout.textStart.text = roundedValue.toString()
     }
 
     private fun bindTvSeriesData(data: TvSeriesDetails) {
@@ -158,6 +162,8 @@ class DetailsActivity : AppCompatActivity() {
         val genre = data.genres?.map { it.name }
         Log.d("Genre", genre.toString())
         binding.discoverContentLayout.genres.text = genre?.joinToString(", ")
+        val roundedValue = (data.voteAverage?.times(10))!!.roundToLong() / 10.0
+        binding.discoverContentLayout.textStart.text = roundedValue.toString()
     }
 
     private fun addAndDeleteFavoriteItem(id: Int?, data: FavoriteItem, category: String) {
@@ -167,11 +173,13 @@ class DetailsActivity : AppCompatActivity() {
             if (binding.discoverContentLayout.favoriteButton.colorFilter == null) {
                 if (id != null) {
                     detailMovieViewModel.deleteMovieFromFavorite(id)
+                    Snackbar.make(binding.root,"This item has been deleted from your favorite.", Snackbar.LENGTH_SHORT).show()
                 }
                 binding.discoverContentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
             } else {
                 binding.discoverContentLayout.favoriteButton.colorFilter = null
                 detailMovieViewModel.addMovieToFavorite(data, currentTimeMillis, category)
+                Snackbar.make(binding.root,"This item has been added to your favorite.", Snackbar.LENGTH_SHORT).show()
             }
         }
     }

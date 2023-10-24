@@ -31,6 +31,7 @@ class MovieInteractor(private val movieRepository: IMovieRepository) : MovieUseC
     override fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>> = movieRepository.tvSeriesSearch(query)
 
     override fun getUpComingMovie(): Flow<Resource<List<Movie>>> = movieRepository.getUpComingMovie()
+    override fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>>  = movieRepository.getUpComingMovieWithPaging()
 
     override fun discoverMovie(): Flow<Resource<List<Movie>>> = movieRepository.discoverMovie()
     override fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>> = movieRepository.getDiscoverMovieWithPaging()

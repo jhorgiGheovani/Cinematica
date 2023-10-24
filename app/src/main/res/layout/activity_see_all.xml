@@ -12,6 +12,7 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabMaxWidth="2000dp"
         android:background="@color/main_background"
         app:tabTextColor="@android:color/white"/>
     <androidx.viewpager2.widget.ViewPager2

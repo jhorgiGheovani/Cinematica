@@ -20,5 +20,7 @@ class MovieListViewHolder(
         binding.runTimeTV.text = data.releaseDate.split("-")[0]
 
         binding.genres.text = data.genres.joinToString (", ")
+
+        binding.textStart.text = data.rating.toString()
     }
 }

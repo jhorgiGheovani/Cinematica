@@ -56,6 +56,12 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.seeAllUpcomingMovie.setOnClickListener {
+            val intent = Intent(activity, SeeAllActivity::class.java)
+            intent.putExtra(SeeAllActivity.TYPE_TITTLE_DATA, SeeAllContentFragment.UPCOMING)
+            startActivity(intent)
+        }
+
     }
 
     private fun fetchUpComingMovie() {

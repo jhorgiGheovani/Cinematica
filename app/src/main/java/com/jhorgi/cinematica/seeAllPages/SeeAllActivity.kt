@@ -2,6 +2,7 @@ package com.jhorgi.cinematica.seeAllPages
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBar
@@ -41,19 +42,30 @@ class SeeAllActivity : AppCompatActivity() {
         val viewPager = binding.viewPager
 
 
-        val sectionPagerAdapter = SectionsPagerSeeAllPagesAdapter(this, dataTittle.toString())
-        viewPager.adapter = sectionPagerAdapter
+        if (dataTittle == SeeAllContentFragment.UPCOMING) {
+            val sectionPagerAdapter = SectionsPagerSeeAllPagesAdapter(this, dataTittle, 1)
+            viewPager.adapter = sectionPagerAdapter
+            tabs.visibility = View.GONE
+        } else {
+            val sectionPagerAdapter =
+                SectionsPagerSeeAllPagesAdapter(this, dataTittle.toString(), 2)
+            viewPager.adapter = sectionPagerAdapter
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
+                tab.text = resources.getString(TAB_TITLES[position])
+            }.attach()
+        }
 
 
-        TabLayoutMediator(tabs,viewPager) {tab, position->
-            tab.text = resources.getString(TAB_TITLES[position])
-        }.attach()
+
+
+
 
     }
 
 
     companion object {
         const val TYPE_TITTLE_DATA = "type_data"
+
         @StringRes
         private val TAB_TITLES = intArrayOf(
             R.string.tab_text_1,

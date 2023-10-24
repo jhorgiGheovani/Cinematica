@@ -32,6 +32,7 @@ class MovieRepository(
     override fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>> = remoteDataSource.tvSeriesSearch(query)
 
     override fun getUpComingMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getUpComingMovie()
+    override fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>>  = remoteDataSource.getUpComingMovieWithPaging()
 
     override fun discoverMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.discoverMovie()
     override fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>> =

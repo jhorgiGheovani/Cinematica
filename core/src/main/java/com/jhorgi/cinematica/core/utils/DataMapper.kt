@@ -73,7 +73,8 @@ object DataMapper {
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
         releaseDate = input.releaseDate,
-        genres = genre
+        genres = genre,
+        rating = input.voteAverage
     )
 
     fun mapTvShowResponseToDomain(input: TvResults, genre: List<String>) = TvSeries(
@@ -85,7 +86,8 @@ object DataMapper {
         posterPath = input.posterPath,
         backdropPath = input.backdropPath,
         firstAirDate = input.firstAirDate,
-        genres = genre
+        genres = genre,
+        voteAverage = input.voteAverage
     )
 
     fun mapMovieDetailsResponseToMovieDetails(
@@ -156,7 +158,8 @@ object DataMapper {
                 id = it.movieId,
                 tittle = it.title,
                 posterPath = it.posterPath,
-                genres = it.genres
+                genres = it.genres,
+                rating = it.rating.toString()
             )
         }
 
@@ -166,7 +169,8 @@ object DataMapper {
                 id = it.id,
                 tittle = it.title,
                 posterPath = it.posterPath,
-                genres = it.genres
+                genres = it.genres,
+                rating = it.voteAverage.toString()
             )
         }
 
@@ -178,7 +182,8 @@ object DataMapper {
                 posterPath = it.posterPath,
                 overview = it.overview,
                 releaseDate = it.releaseDate,
-                genres = it.genres
+                genres = it.genres,
+                rating = it.rating.toString()
             )
         }
 

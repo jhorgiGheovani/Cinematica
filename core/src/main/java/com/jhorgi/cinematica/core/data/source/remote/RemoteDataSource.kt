@@ -5,10 +5,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.jhorgi.cinematica.core.data.Resource
-import com.jhorgi.cinematica.core.data.pagingDataSource.discover.DiscoverMoviePagingSource
-import com.jhorgi.cinematica.core.data.pagingDataSource.discover.DiscoverTvSeriesPagingSource
-import com.jhorgi.cinematica.core.data.pagingDataSource.popular.PopularMoviePagingSource
-import com.jhorgi.cinematica.core.data.pagingDataSource.popular.PopularTvSeriesPagingSource
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource
+import com.jhorgi.cinematica.core.data.pagingDataSource.TvSeriesPagingSource
 import com.jhorgi.cinematica.core.data.source.remote.network.ApiService
 import com.jhorgi.cinematica.core.domain.model.Credit
 import com.jhorgi.cinematica.core.domain.model.Movie
@@ -51,7 +49,7 @@ class RemoteDataSource(private val apiService: ApiService) {
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                PopularMoviePagingSource(apiService)
+                MoviePagingSource(apiService, MoviePagingSource.ARG_POPULAR_MOVIE)
             }
         ).flow
     }
@@ -69,6 +67,19 @@ class RemoteDataSource(private val apiService: ApiService) {
         } catch (e: Exception) {
             emit(Resource.Error(e.message.toString()))
         }
+    }
+
+    fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = NETWORK_PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                MoviePagingSource(apiService, MoviePagingSource.ARG_UP_COMING_MOVIE)
+            }
+        ).flow
+
     }
 
     fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = flow {
@@ -139,7 +150,7 @@ class RemoteDataSource(private val apiService: ApiService) {
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                PopularTvSeriesPagingSource(apiService)
+                TvSeriesPagingSource(apiService, TvSeriesPagingSource.ARG_POPULAR_TV_SERIES)
             }
         ).flow
     }
@@ -254,7 +265,7 @@ class RemoteDataSource(private val apiService: ApiService) {
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                DiscoverMoviePagingSource(apiService)
+                MoviePagingSource(apiService,MoviePagingSource.ARG_DISCOVER_MOVIE)
             }
         ).flow
     }
@@ -266,7 +277,7 @@ class RemoteDataSource(private val apiService: ApiService) {
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                DiscoverTvSeriesPagingSource(apiService)
+                TvSeriesPagingSource(apiService, TvSeriesPagingSource.ARG_DISCOVER_TV_SERIES)
             }
         ).flow
     }

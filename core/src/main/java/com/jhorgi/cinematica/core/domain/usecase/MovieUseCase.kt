@@ -30,6 +30,8 @@ interface MovieUseCase {
     fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>>
 
     fun getUpComingMovie(): Flow<Resource<List<Movie>>>
+
+    fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>>
     fun discoverMovie(): Flow<Resource<List<Movie>>>
 
     fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>>

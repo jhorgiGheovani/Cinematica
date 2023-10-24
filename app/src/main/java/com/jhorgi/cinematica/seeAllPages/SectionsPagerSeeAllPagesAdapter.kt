@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class SectionsPagerSeeAllPagesAdapter(activity: AppCompatActivity, private val type: String) :
+class SectionsPagerSeeAllPagesAdapter(activity: AppCompatActivity, private val type: String, private val tabTotal: Int) :
     FragmentStateAdapter(activity) {
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = tabTotal
 
     override fun createFragment(position: Int): Fragment {
         val fragment = SeeAllContentFragment()
