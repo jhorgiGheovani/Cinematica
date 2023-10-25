@@ -42,7 +42,7 @@ class SeeAllActivity : AppCompatActivity() {
         val viewPager = binding.viewPager
 
 
-        if (dataTittle == SeeAllContentFragment.UPCOMING) {
+        if (dataTittle == SeeAllContentFragment.UPCOMING || dataTittle == SeeAllContentFragment.NOW_PLAYING_MOVIE) {
             val sectionPagerAdapter = SectionsPagerSeeAllPagesAdapter(this, dataTittle, 1)
             viewPager.adapter = sectionPagerAdapter
             tabs.visibility = View.GONE

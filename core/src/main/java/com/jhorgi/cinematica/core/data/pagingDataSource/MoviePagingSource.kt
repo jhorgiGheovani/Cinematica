@@ -12,6 +12,8 @@ class MoviePagingSource(private val apiService: ApiService, private val requestD
     companion object {
         const val INITIAL_PAGE_INDEX = 1
         const val ARG_UP_COMING_MOVIE = "upcoming_movie"
+        const val ARG_TOP_RATED_MOVIE = "top_rated_movie"
+        const val ARG_NOW_PLAYING_MOVIE = "now_playing_movie"
         const val ARG_DISCOVER_MOVIE = "discover_movie"
         const val ARG_POPULAR_MOVIE = "popular_movie"
     }
@@ -56,6 +58,26 @@ class MoviePagingSource(private val apiService: ApiService, private val requestD
             //Popular Movie
             if(requestData == ARG_POPULAR_MOVIE){
                 dataMapped = apiService.getPopularMovie(page = page).results.map {
+                    val listOfGenre = it.genreIds.mapNotNull{id->
+                        idToMap[id]?.name  //3. map the List<Id> to id key
+                    }
+                    DataMapper.mapMovieResponseToDomain(it,listOfGenre)
+                }
+            }
+
+            //Top Rated Movie
+            if(requestData == ARG_TOP_RATED_MOVIE){
+                dataMapped = apiService.getTopRatedMovie(page = page).results.map {
+                    val listOfGenre = it.genreIds.mapNotNull{id->
+                        idToMap[id]?.name  //3. map the List<Id> to id key
+                    }
+                    DataMapper.mapMovieResponseToDomain(it,listOfGenre)
+                }
+            }
+
+            //Now Playing Movie
+            if(requestData == ARG_NOW_PLAYING_MOVIE){
+                dataMapped = apiService.getNowPlayingMovie(page = page).results.map {
                     val listOfGenre = it.genreIds.mapNotNull{id->
                         idToMap[id]?.name  //3. map the List<Id> to id key
                     }

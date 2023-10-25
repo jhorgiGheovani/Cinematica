@@ -82,6 +82,21 @@ class SeeAllContentFragment : Fragment() {
                 }
             }
 
+            if(type == TOP_RATED){
+                viewLifecycleOwner.lifecycleScope.launch {
+                    seeAllPagesViewModel.topRatedMovie.collectLatest { resourcePagingData->
+                        moviePagingAdapter.submitData(resourcePagingData)
+                    }
+                }
+            }
+
+            if(type == NOW_PLAYING_MOVIE){
+                viewLifecycleOwner.lifecycleScope.launch {
+                    seeAllPagesViewModel.getNowPlayingMovie.collectLatest { resourcePagingData->
+                        moviePagingAdapter.submitData(resourcePagingData)
+                    }
+                }
+            }
 
             with(binding.rvSeeAllFragment){
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -122,6 +137,13 @@ class SeeAllContentFragment : Fragment() {
                     }
                 }
             }
+            if(type == TOP_RATED){
+                viewLifecycleOwner.lifecycleScope.launch{
+                    seeAllPagesViewModel.topRatedTvSeries.collectLatest { resourcePagingData->
+                        tvSeriesPagingAdapter.submitData(resourcePagingData)
+                    }
+                }
+            }
 
             with(binding.rvSeeAllFragment){
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -141,6 +163,8 @@ class SeeAllContentFragment : Fragment() {
         const val DISCOVERY= "Discovery"
         const val POPULAR = "Popular"
         const val UPCOMING = "Up Coming Movie"
+        const val TOP_RATED = "Top Rated"
+        const val NOW_PLAYING_MOVIE = "Now Playing Movie"
     }
 
 

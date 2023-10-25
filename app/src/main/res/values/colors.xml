@@ -5,4 +5,5 @@
     <color name="main_background">#19191b</color>
     <color name="dark_soft">#252836</color>
     <color name="yellow_start">#FF8700</color>
+    <color name="blue_accent">#12CDD9</color>
 </resources>

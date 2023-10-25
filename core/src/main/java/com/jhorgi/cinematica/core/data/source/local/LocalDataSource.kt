@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.flow
 class LocalDataSource(private val movieDao: MovieDao) {
 
 
-    suspend fun addMovieToFavorite(movie: FavoriteItem, timeStamp: Long, category: String) {
+    suspend fun addMovieToFavorite(movie: FavoriteItem, timeStamp: Long, category: String, rating: String) {
         try {
-            val movieEntity = DataMapper.mapDomainToMovieEntity(movie, timeStamp, category)
+            val movieEntity = DataMapper.mapDomainToMovieEntity(movie, timeStamp, category, rating)
             movieDao.insertMovie(movieEntity)
         } catch (e: Exception) {
             Log.d("Error when addMovieToFavorite", e.message.toString())

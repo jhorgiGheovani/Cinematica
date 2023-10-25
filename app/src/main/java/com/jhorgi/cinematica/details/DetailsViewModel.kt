@@ -84,9 +84,9 @@ class DetailsViewModel(private val movieUseCase: MovieUseCase) : ViewModel() {
             .launchIn(viewModelScope)
     }
 
-    fun addMovieToFavorite(movie: FavoriteItem, timeStamp: Long, category: String) {
+    fun addMovieToFavorite(movie: FavoriteItem, timeStamp: Long, category: String, rating: String) {
         viewModelScope.launch {
-            movieUseCase.addItemToFavorite(movie, timeStamp, category)
+            movieUseCase.addItemToFavorite(movie, timeStamp, category, rating)
         }
     }
 

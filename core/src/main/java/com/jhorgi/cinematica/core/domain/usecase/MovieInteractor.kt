@@ -19,13 +19,16 @@ class MovieInteractor(private val movieRepository: IMovieRepository) : MovieUseC
     override fun getPopularMovieWithPaging(): Flow<PagingData<Movie>> = movieRepository.getPopularMovieWithPaging()
 
     override fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = movieRepository.getTopRatedMovie()
+    override fun getTopRatedMovieWithPaging(): Flow<PagingData<Movie>>  = movieRepository.getTopRatedMovieWithPaging()
 
     override fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = movieRepository.getNowPlayingMovie()
+    override fun getNowPlayingMovieWithPaging(): Flow<PagingData<Movie>> = movieRepository.getNowPlayingMovieWithPaging()
 
     override fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = movieRepository.getPopularTvShow()
     override fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>> = movieRepository.getPopularTvShowWithPaging()
 
     override fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = movieRepository.getTopRatedTvShows()
+    override fun getTopRatedTvShowsWithPaging(): Flow<PagingData<TvSeries>>  = movieRepository.getTopRatedTvShowsWithPaging()
 
     override fun movieSearch(query: String): Flow<Resource<List<Movie>>> = movieRepository.movieSearch(query)
     override fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>> = movieRepository.tvSeriesSearch(query)
@@ -57,8 +60,8 @@ class MovieInteractor(private val movieRepository: IMovieRepository) : MovieUseC
     override fun getTvCrew(seriesId: Int): Flow<List<Credit>> =
         movieRepository.getTvCrew(seriesId)
 
-    override suspend fun addItemToFavorite(movie: FavoriteItem, timeStamp: Long, category: String) =
-        movieRepository.addMovieToFavorite(movie, timeStamp, category)
+    override suspend fun addItemToFavorite(movie: FavoriteItem, timeStamp: Long, category: String, rating: String) =
+        movieRepository.addMovieToFavorite(movie, timeStamp, category, rating)
 
     override suspend fun deleteMovieFromFavorite(movieId: Int) =
         movieRepository.deleteMovieFromFavorite(movieId)

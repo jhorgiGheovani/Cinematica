@@ -13,6 +13,7 @@ class TvSeriesPagingSource(private val apiService: ApiService, private val reque
         const val INITIAL_PAGE_INDEX = 1
         const val ARG_DISCOVER_TV_SERIES = "discover_tv_series"
         const val ARG_POPULAR_TV_SERIES = "popular_tv_series"
+        const val ARG_TOP_RATED_TV_SERIES = "top_rated_tv_series"
     }
 
     override fun getRefreshKey(state: PagingState<Int, TvSeries>): Int? {
@@ -45,6 +46,16 @@ class TvSeriesPagingSource(private val apiService: ApiService, private val reque
             //Popular Tv Series
             if(requestData == ARG_POPULAR_TV_SERIES){
                 dataMapped = apiService.getPopularTvShow(page = page).results.map {
+                    val listOfGenre = it.genreIds?.mapNotNull { id ->
+                        idToMap[id]?.name  //3. map the List<Id> to id key
+                    }
+                    DataMapper.mapTvShowResponseToDomain(it, listOfGenre!!)
+                }
+            }
+
+            //Top Rated Tv Series
+            if(requestData == ARG_TOP_RATED_TV_SERIES){
+                dataMapped = apiService.getTopRatedTvShows(page = page).results.map {
                     val listOfGenre = it.genreIds?.mapNotNull { id ->
                         idToMap[id]?.name  //3. map the List<Id> to id key
                     }

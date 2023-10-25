@@ -30,7 +30,7 @@ data class MovieEntity(
     var posterPath: String? = null,
 
     @ColumnInfo(name = "voteAverage")
-    var voteAverage: Double?=null,
+    var voteAverage: String?=null,
 
     @ColumnInfo(name = "timeStamp")
     var timeStamp: Long?=null,

@@ -32,6 +32,7 @@ class DetailsActivity : AppCompatActivity() {
         val movieId = intent.getIntExtra(EXTRA_DATA, 0)
         val seriesId = intent.getIntExtra(EXTRA_DATA, 0)
         val typeData = intent.getStringExtra(TYPE_DATA)
+        val ratingData = intent.getStringExtra(RATING)
 
         val layoutManagerCast = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.discoverContentLayout.rvCast.layoutManager = layoutManagerCast
@@ -40,6 +41,9 @@ class DetailsActivity : AppCompatActivity() {
         binding.discoverContentLayout.rvCrew.layoutManager = layoutManagerCrew
 
 
+        binding.discoverContentLayout.backButton.setOnClickListener {
+            finish()
+        }
         detailMovieViewModel.isFavoriteItem.observe(this) {
             if (it != true) {
                 binding.discoverContentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
@@ -67,8 +71,8 @@ class DetailsActivity : AppCompatActivity() {
                 bindMovieDetails(movieDetails)
 
                 //Add movie To Favorite
-                val data = DataMapper.mapMovieDetailsToFavoriteItem(movieDetails)
-                addAndDeleteFavoriteItem(movieDetails.id, data, typeData)
+                val data = DataMapper.mapMovieDetailsToFavoriteItem(movieDetails,ratingData.toString())
+                addAndDeleteFavoriteItem(movieDetails.id, data, typeData, ratingData.toString())
             }
         }
         if (typeData == TV_SERIES_TYPE) {
@@ -91,8 +95,8 @@ class DetailsActivity : AppCompatActivity() {
                 bindTvSeriesData(tvSeriesDetails)
 
                 //Add tv series to Favorite
-                val data = DataMapper.mapTvDetailsToFavoriteItem(tvSeriesDetails)
-                addAndDeleteFavoriteItem(tvSeriesDetails.id, data, typeData)
+                val data = DataMapper.mapTvDetailsToFavoriteItem(tvSeriesDetails, ratingData.toString())
+                addAndDeleteFavoriteItem(tvSeriesDetails.id, data, typeData, ratingData.toString())
             }
         }
 
@@ -166,7 +170,7 @@ class DetailsActivity : AppCompatActivity() {
         binding.discoverContentLayout.textStart.text = roundedValue.toString()
     }
 
-    private fun addAndDeleteFavoriteItem(id: Int?, data: FavoriteItem, category: String) {
+    private fun addAndDeleteFavoriteItem(id: Int?, data: FavoriteItem, category: String, rating: String) {
         binding.discoverContentLayout.favoriteButton.setOnClickListener {
             val currentTimeMillis = System.currentTimeMillis()  //Time Stamp
             //check favorite status by love button color
@@ -178,7 +182,7 @@ class DetailsActivity : AppCompatActivity() {
                 binding.discoverContentLayout.favoriteButton.setColorFilter(getColor(R.color.white))
             } else {
                 binding.discoverContentLayout.favoriteButton.colorFilter = null
-                detailMovieViewModel.addMovieToFavorite(data, currentTimeMillis, category)
+                detailMovieViewModel.addMovieToFavorite(data, currentTimeMillis, category, rating)
                 Snackbar.make(binding.root,"This item has been added to your favorite.", Snackbar.LENGTH_SHORT).show()
             }
         }
@@ -189,5 +193,6 @@ class DetailsActivity : AppCompatActivity() {
         const val TYPE_DATA = "type_data"
         const val MOVIE_TYPE = "movie"
         const val TV_SERIES_TYPE = "tv_series"
+        const val RATING ="rating"
     }
 }

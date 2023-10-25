@@ -18,13 +18,17 @@ interface MovieUseCase {
 
     fun getTopRatedMovie(): Flow<Resource<List<Movie>>>
 
+    fun getTopRatedMovieWithPaging(): Flow<PagingData<Movie>>
     fun getNowPlayingMovie(): Flow<Resource<List<Movie>>>
 
+    fun getNowPlayingMovieWithPaging(): Flow<PagingData<Movie>>
     fun getPopularTvShow(): Flow<Resource<List<TvSeries>>>
 
     fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>>
 
     fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>>
+
+    fun getTopRatedTvShowsWithPaging(): Flow<PagingData<TvSeries>>
     fun movieSearch(query:String): Flow<Resource<List<Movie>>>
 
     fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>>
@@ -50,7 +54,7 @@ interface MovieUseCase {
 
     fun getTvCrew(seriesId: Int): Flow<List<Credit>>
 
-    suspend fun addItemToFavorite(movie: FavoriteItem, timeStamp: Long, category: String)
+    suspend fun addItemToFavorite(movie: FavoriteItem, timeStamp: Long, category: String, rating:String)
 
     suspend fun deleteMovieFromFavorite(movieId: Int)
 

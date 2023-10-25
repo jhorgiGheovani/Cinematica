@@ -31,7 +31,7 @@ object DataMapper {
             )
         }
 
-    fun mapDomainToMovieEntity(input: FavoriteItem, timeStamp: Long, category: String) =
+    fun mapDomainToMovieEntity(input: FavoriteItem, timeStamp: Long, category: String, rating:String) =
         MovieEntity(
             movieId = input.id,
             title = input.title,
@@ -39,29 +39,29 @@ object DataMapper {
             releaseDate = input.releaseDate,
             overview = input.overview,
             posterPath = input.posterPath,
-            voteAverage = input.voteAverage,
+            voteAverage = rating,
             timeStamp = timeStamp,
             category = category
         )
 
-    fun mapMovieDetailsToFavoriteItem(input: MovieDetails) = FavoriteItem(
+    fun mapMovieDetailsToFavoriteItem(input: MovieDetails, rating: String) = FavoriteItem(
         id = input.id,
         title = input.title,
         genres = input.genres,
         releaseDate = input.releaseDate,
         overview = input.overview,
         posterPath = input.posterPath,
-        voteAverage = input.voteAverage,
+        voteAverage = rating,
     )
 
-    fun mapTvDetailsToFavoriteItem(input: TvSeriesDetails) = FavoriteItem(
+    fun mapTvDetailsToFavoriteItem(input: TvSeriesDetails, rating: String) = FavoriteItem(
         id = input.id,
         title = input.title,
         genres = input.genres,
         releaseDate = input.releaseDate,
         overview = input.overview,
         posterPath = input.posterPath,
-        voteAverage = input.voteAverage,
+        voteAverage = rating,
     )
 
     fun mapMovieResponseToDomain(input: ResultsItem, genre: List<String>) = Movie(
@@ -208,7 +208,8 @@ object DataMapper {
                 posterPath = it.posterPath,
                 overview = it.overview,
                 releaseDate = it.releaseDate,
-                genres = genre
+                genres = genre,
+                rating = it.voteAverage.toString()
             )
 
         }

@@ -17,6 +17,7 @@ import com.jhorgi.cinematica.databinding.FragmentHomeBinding
 import com.jhorgi.cinematica.details.DetailsActivity
 import com.jhorgi.cinematica.home.imagesSliderAdapter.ImagesSliideAdapter
 import com.jhorgi.cinematica.seeAllPages.SeeAllActivity
+import com.jhorgi.cinematica.seeAllPages.SeeAllActivity.Companion.TYPE_TITTLE_DATA
 import com.jhorgi.cinematica.seeAllPages.SeeAllContentFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
@@ -27,6 +28,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
     private val autoScrollHandler = Handler(Looper.getMainLooper())
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +43,6 @@ class HomeFragment : Fragment() {
 
 
         homeViewModel.getPopularMovie()
-
         fetchPopularMovie()
 
         homeViewModel.getPopularTvShow()
@@ -50,20 +51,40 @@ class HomeFragment : Fragment() {
         homeViewModel.getUpComingMovie()
         fetchUpComingMovie()
 
+        homeViewModel.getTopRatedMovie()
+        fetchTopRatedMovie()
+
+        homeViewModel.getTopRatedTvShows()
+        fetchTopRatedTvShow()
+
+        homeViewModel.getNowPlayingMovie()
+        fetchNowPlayingMovie()
+
         binding.seeAllPopularContent.setOnClickListener {
             val intent = Intent(activity, SeeAllActivity::class.java)
-            intent.putExtra(SeeAllActivity.TYPE_TITTLE_DATA, SeeAllContentFragment.POPULAR)
+            intent.putExtra(TYPE_TITTLE_DATA, SeeAllContentFragment.POPULAR)
             startActivity(intent)
         }
 
         binding.seeAllUpcomingMovie.setOnClickListener {
             val intent = Intent(activity, SeeAllActivity::class.java)
-            intent.putExtra(SeeAllActivity.TYPE_TITTLE_DATA, SeeAllContentFragment.UPCOMING)
+            intent.putExtra(TYPE_TITTLE_DATA, SeeAllContentFragment.UPCOMING)
+            startActivity(intent)
+        }
+
+        binding.seeAllNowPlayingContent.setOnClickListener {
+            val intent = Intent(activity, SeeAllActivity::class.java)
+            intent.putExtra(TYPE_TITTLE_DATA, SeeAllContentFragment.NOW_PLAYING_MOVIE)
+            startActivity(intent)
+        }
+
+        binding.seeAllTopRatedContent.setOnClickListener {
+            val intent = Intent(activity, SeeAllActivity::class.java)
+            intent.putExtra(TYPE_TITTLE_DATA , SeeAllContentFragment.TOP_RATED)
             startActivity(intent)
         }
 
     }
-
     private fun fetchUpComingMovie() {
         homeViewModel.upComingMovie.observe(viewLifecycleOwner) { upComingMovie ->
             when (upComingMovie) {
@@ -95,7 +116,13 @@ class HomeFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    view?.let { it1 -> Snackbar.make(it1, upComingMovie.error, Snackbar.LENGTH_SHORT).show() }
+                    view?.let { it1 ->
+                        Snackbar.make(
+                            it1,
+                            upComingMovie.error,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -111,11 +138,13 @@ class HomeFragment : Fragment() {
             when (popularMovie) {
                 is Resource.Success -> {
 
-                    val data  = DataMapper.mapMovieToRecyclerViewDataList1(popularMovie.data)
+
+                    val data = DataMapper.mapMovieToRecyclerViewDataList1(popularMovie.data)
                     val popularMovieAdapter = ListAdapterV1(data) { onclick ->
                         val intent = Intent(activity, DetailsActivity::class.java)
                         intent.putExtra(DetailsActivity.EXTRA_DATA, onclick.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.MOVIE_TYPE)
+                        intent.putExtra(DetailsActivity.RATING, onclick.rating)
                         startActivity(intent)
                     }
 
@@ -124,7 +153,9 @@ class HomeFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    view?.let { it1 -> Snackbar.make(it1, popularMovie.error, Snackbar.LENGTH_SHORT).show() }
+                    view?.let { it1 ->
+                        Snackbar.make(it1, popularMovie.error, Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -144,6 +175,7 @@ class HomeFragment : Fragment() {
                         val intent = Intent(activity, DetailsActivity::class.java)
                         intent.putExtra(DetailsActivity.EXTRA_DATA, onclick.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.TV_SERIES_TYPE)
+                        intent.putExtra(DetailsActivity.RATING, onclick.rating)
                         startActivity(intent)
                     }
                     binding.rvPopularTvShow.adapter = popularMovieAdapter
@@ -158,5 +190,93 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun fetchTopRatedMovie() {
+        val topRatedMovieLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvTopRatedMovie.layoutManager = topRatedMovieLayoutManager
 
+        homeViewModel.topRatedMovie.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+
+                    val data = DataMapper.mapMovieToRecyclerViewDataList1(it.data)
+                    val topRatedMovieAdapter = ListAdapterV1(data) { onclick ->
+                        val intent = Intent(activity, DetailsActivity::class.java)
+                        intent.putExtra(DetailsActivity.EXTRA_DATA, onclick.id)
+                        intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.MOVIE_TYPE)
+                        intent.putExtra(DetailsActivity.RATING, onclick.rating)
+                        startActivity(intent)
+                    }
+
+
+                    binding.rvTopRatedMovie.adapter = topRatedMovieAdapter
+                }
+
+                is Resource.Error -> {
+                    view?.let { it1 -> Snackbar.make(it1, it.error, Snackbar.LENGTH_SHORT).show() }
+                }
+            }
+        }
+
+    }
+
+
+    private fun fetchTopRatedTvShow(){
+        val topRatedTvShowsLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvTopRatedTvShow.layoutManager = topRatedTvShowsLayoutManager
+
+        homeViewModel.topRatedTvShow.observe(viewLifecycleOwner){
+            when(it) {
+                is Resource.Success -> {
+
+
+                    val tvShow = DataMapper.mapTvSeriesToRecyclerViewDataList1(it.data)
+                    val topRatedMovieAdapter = ListAdapterV1(tvShow) { onclick ->
+                        val intent = Intent(activity, DetailsActivity::class.java)
+                        intent.putExtra(DetailsActivity.EXTRA_DATA, onclick.id)
+                        intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.TV_SERIES_TYPE)
+                        intent.putExtra(DetailsActivity.RATING, onclick.rating)
+                        startActivity(intent)
+                    }
+                    binding.rvTopRatedTvShow.adapter = topRatedMovieAdapter
+
+                }
+                is Resource.Error -> {
+                    view?.let { it1 -> Snackbar.make(it1, it.error, Snackbar.LENGTH_SHORT).show() }
+                }
+            }
+        }
+    }
+
+    private fun fetchNowPlayingMovie() {
+        val nowPlayingMovieLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvNowPlayingMovie.layoutManager = nowPlayingMovieLayoutManager
+
+        homeViewModel.nowPlayingMovie.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+
+
+                    val data = DataMapper.mapMovieToRecyclerViewDataList1(it.data)
+                    val nowPlayingMovieAdapter = ListAdapterV1(data) { onclick ->
+                        val intent = Intent(activity, DetailsActivity::class.java)
+                        intent.putExtra(DetailsActivity.EXTRA_DATA, onclick.id)
+                        intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.MOVIE_TYPE)
+                        intent.putExtra(DetailsActivity.RATING, onclick.rating)
+                        startActivity(intent)
+                    }
+
+
+                    binding.rvNowPlayingMovie.adapter = nowPlayingMovieAdapter
+                }
+                is Resource.Error -> {
+                    view?.let { it1 ->
+                        Snackbar.make(it1, it.error, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
 }

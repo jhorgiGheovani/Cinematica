@@ -18,7 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Discover"
-            android:textSize="15sp"
+            android:textSize="20sp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +30,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
+            android:textColor="@color/blue_accent"
             android:text="See all"
+            android:fontFamily="@font/montserrat_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,8 +41,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Movie"
-            android:textSize="15sp"
+            android:text="Movies"
+            android:textSize="16sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/discoverLabel" />
@@ -76,8 +82,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Tv Show"
-            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="Tv Shows"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cover1" />

@@ -11,5 +11,5 @@ data class FavoriteItem(
     val releaseDate: String?=null,
     val overview: String?=null,
     val posterPath: String?=null,
-    val voteAverage: Double? = null
+    val voteAverage: String? = null
 ) : Parcelable

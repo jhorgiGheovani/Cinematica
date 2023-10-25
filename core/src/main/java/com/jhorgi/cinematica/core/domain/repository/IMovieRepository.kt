@@ -17,7 +17,10 @@ interface IMovieRepository {
 
     fun getTopRatedMovie(): Flow<Resource<List<Movie>>>
 
+    fun getTopRatedMovieWithPaging(): Flow<PagingData<Movie>>
     fun getNowPlayingMovie(): Flow<Resource<List<Movie>>>
+
+    fun getNowPlayingMovieWithPaging(): Flow<PagingData<Movie>>
 
     fun getPopularTvShow(): Flow<Resource<List<TvSeries>>>
 
@@ -25,6 +28,7 @@ interface IMovieRepository {
 
     fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>>
 
+    fun getTopRatedTvShowsWithPaging(): Flow<PagingData<TvSeries>>
     fun movieSearch(query:String): Flow<Resource<List<Movie>>>
 
     fun tvSeriesSearch(query:String): Flow<Resource<List<TvSeries>>>
@@ -52,7 +56,7 @@ interface IMovieRepository {
 
     fun getTvCrew(series_id: Int): Flow<List<Credit>>
 
-    suspend fun addMovieToFavorite(movie: FavoriteItem, timeStamp: Long, category: String)
+    suspend fun addMovieToFavorite(movie: FavoriteItem, timeStamp: Long, category: String, rating: String)
 
     suspend fun deleteMovieFromFavorite(itemId: Int)
 

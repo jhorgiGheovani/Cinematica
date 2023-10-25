@@ -134,6 +134,7 @@ class SearchFragment : Fragment() {
                         val intent = Intent(activity, DetailsActivity::class.java)
                         intent.putExtra(DetailsActivity.EXTRA_DATA, clickMovie.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.MOVIE_TYPE)
+                        intent.putExtra(DetailsActivity.RATING, clickMovie.rating)
                         startActivity(intent)
                     }
                     binding.discoverContentLayout.movieDiscoverRV.adapter = movieAdapter
@@ -160,6 +161,7 @@ class SearchFragment : Fragment() {
                         val intent = Intent(activity, DetailsActivity::class.java)
                         intent.putExtra(DetailsActivity.EXTRA_DATA, clickTvShow.id)
                         intent.putExtra(DetailsActivity.TYPE_DATA, DetailsActivity.TV_SERIES_TYPE)
+                        intent.putExtra(DetailsActivity.RATING, clickTvShow.rating)
                         startActivity(intent)
                     }
                     binding.discoverContentLayout.tvShowDiscoverRV.adapter = tvShowAdapter

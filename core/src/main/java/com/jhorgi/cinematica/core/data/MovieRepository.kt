@@ -20,14 +20,16 @@ class MovieRepository(
     override fun getPopularMovieWithPaging(): Flow<PagingData<Movie>> = remoteDataSource.getPopularMovieWithPaging()
 
     override fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getTopRatedMovie()
+    override fun getTopRatedMovieWithPaging(): Flow<PagingData<Movie>> = remoteDataSource.getTopRatedMovieWithPaging()
 
     override fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getNowPlayingMovie()
+    override fun getNowPlayingMovieWithPaging(): Flow<PagingData<Movie>>  = remoteDataSource.getNowPlayingMovieWithPaging()
 
     override fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = remoteDataSource.getPopularTvShow()
     override fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>> = remoteDataSource.getPopularTvShowWithPaging()
 
     override fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = remoteDataSource.getTopRatedTvShows()
-
+    override fun getTopRatedTvShowsWithPaging(): Flow<PagingData<TvSeries>>  = remoteDataSource.getTopRatedTvShowsWithPaging()
     override fun movieSearch(query: String): Flow<Resource<List<Movie>>> = remoteDataSource.movieSearch(query)
     override fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>> = remoteDataSource.tvSeriesSearch(query)
 
@@ -64,9 +66,10 @@ class MovieRepository(
     override suspend fun addMovieToFavorite(
         movie: FavoriteItem,
         timeStamp: Long,
-        category: String
+        category: String,
+        rating:String
     ) {
-        return localDataSource.addMovieToFavorite(movie, timeStamp, category)
+        return localDataSource.addMovieToFavorite(movie, timeStamp, category, rating)
     }
 
     override suspend fun deleteMovieFromFavorite(itemId: Int) {
