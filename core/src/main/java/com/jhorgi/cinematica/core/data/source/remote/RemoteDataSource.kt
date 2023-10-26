@@ -350,8 +350,9 @@ class RemoteDataSource(private val apiService: ApiService) {
                 val listOfGenre = it.genreIds.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
-
-                DataMapper.mapMovieResponseToDomain(it, listOfGenre)
+//                val rating = it.voteAverage.
+                val roundedValue = "%.1f".format(it.voteAverage).toDouble()
+                DataMapper.mapMovieSearchToDomain(it, listOfGenre, roundedValue)
             }
 
             emit(Resource.Success(response))
@@ -373,8 +374,8 @@ class RemoteDataSource(private val apiService: ApiService) {
                 val listOfGenre = it.genreIds?.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
-
-                DataMapper.mapTvShowResponseToDomain(it, listOfGenre!!)
+                val roundedValue = "%.1f".format(it.voteAverage).toDouble()
+                DataMapper.mapTvShowSearchResponseToDomain(it, listOfGenre!!,roundedValue)
             }
 
             emit(Resource.Success(response))

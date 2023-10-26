@@ -1,7 +1,6 @@
 package com.jhorgi.cinematica.details
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -164,7 +163,7 @@ class DetailsActivity : AppCompatActivity() {
 
         //bind genres
         val genre = data.genres?.map { it.name }
-        Log.d("Genre", genre.toString())
+
         binding.discoverContentLayout.genres.text = genre?.joinToString(", ")
         val roundedValue = (data.voteAverage?.times(10))!!.roundToLong() / 10.0
         binding.discoverContentLayout.textStart.text = roundedValue.toString()
