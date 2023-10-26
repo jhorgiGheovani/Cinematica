@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private var loadedSections = 0
 
     private val autoScrollHandler = Handler(Looper.getMainLooper())
     override fun onCreateView(
@@ -60,6 +62,9 @@ class HomeFragment : Fragment() {
         homeViewModel.getNowPlayingMovie()
         fetchNowPlayingMovie()
 
+        binding.progressBar.setAnimation("loadingSpinner.lottie")
+        binding.progressBar.playAnimation()
+        binding.scrollView.setOnTouchListener { _, _ -> true }
         binding.seeAllPopularContent.setOnClickListener {
             val intent = Intent(activity, SeeAllActivity::class.java)
             intent.putExtra(TYPE_TITTLE_DATA, SeeAllContentFragment.POPULAR)
@@ -84,6 +89,14 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
+    }
+
+    private fun updateGlobalLoading() {
+        if (loadedSections >= 5) {
+            Log.d("loadedSections", loadedSections.toString())
+            binding.loadingLayout.visibility = View.GONE
+            binding.scrollView.setOnTouchListener { _, _ -> false }
+        }
     }
     private fun fetchUpComingMovie() {
         homeViewModel.upComingMovie.observe(viewLifecycleOwner) { upComingMovie ->
@@ -138,7 +151,6 @@ class HomeFragment : Fragment() {
             when (popularMovie) {
                 is Resource.Success -> {
 
-
                     val data = DataMapper.mapMovieToRecyclerViewDataList1(popularMovie.data)
                     val popularMovieAdapter = ListAdapterV1(data) { onclick ->
                         val intent = Intent(activity, DetailsActivity::class.java)
@@ -150,6 +162,8 @@ class HomeFragment : Fragment() {
 
 
                     binding.rvPopularMovie.adapter = popularMovieAdapter
+                    loadedSections++
+                    updateGlobalLoading()
                 }
 
                 is Resource.Error -> {
@@ -169,7 +183,6 @@ class HomeFragment : Fragment() {
         homeViewModel.popularTvShow.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-
                     val tvShow = DataMapper.mapTvSeriesToRecyclerViewDataList1(it.data)
                     val popularMovieAdapter = ListAdapterV1(tvShow) { onclick ->
                         val intent = Intent(activity, DetailsActivity::class.java)
@@ -179,7 +192,8 @@ class HomeFragment : Fragment() {
                         startActivity(intent)
                     }
                     binding.rvPopularTvShow.adapter = popularMovieAdapter
-
+                    loadedSections++
+                    updateGlobalLoading()
 
                 }
 
@@ -210,6 +224,8 @@ class HomeFragment : Fragment() {
 
 
                     binding.rvTopRatedMovie.adapter = topRatedMovieAdapter
+                    loadedSections++
+                    updateGlobalLoading()
                 }
 
                 is Resource.Error -> {
@@ -241,6 +257,9 @@ class HomeFragment : Fragment() {
                     }
                     binding.rvTopRatedTvShow.adapter = topRatedMovieAdapter
 
+                    loadedSections++
+                    updateGlobalLoading()
+
                 }
                 is Resource.Error -> {
                     view?.let { it1 -> Snackbar.make(it1, it.error, Snackbar.LENGTH_SHORT).show() }
@@ -270,6 +289,9 @@ class HomeFragment : Fragment() {
 
 
                     binding.rvNowPlayingMovie.adapter = nowPlayingMovieAdapter
+
+                    loadedSections++
+                    updateGlobalLoading()
                 }
                 is Resource.Error -> {
                     view?.let { it1 ->

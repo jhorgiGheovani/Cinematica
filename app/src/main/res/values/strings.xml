@@ -10,6 +10,11 @@
     <string name="content_desc_movie_poster">Movie Poster</string>
     <string name="content_desc_favorite_button">Favorite Button</string>
 
+    <!-- Fragment Home-->
+    <string name="movies">Movies</string>
+    <string name="tv_shows">Tv Shows</string>
+    <string name="see_all">See All</string>
+
     <!--  Placeholder text  -->
     <string name="overview_item_list_style_1">No overview available</string>
     <!-- For dev -->
