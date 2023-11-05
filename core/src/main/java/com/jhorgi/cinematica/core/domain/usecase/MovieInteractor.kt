@@ -1,7 +1,8 @@
 package com.jhorgi.cinematica.core.domain.usecase
 
-import androidx.paging.PagingData
 import com.jhorgi.cinematica.core.data.Resource
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource
+import com.jhorgi.cinematica.core.data.pagingDataSource.TvSeriesPagingSource
 import com.jhorgi.cinematica.core.domain.model.Credit
 import com.jhorgi.cinematica.core.domain.model.FavoriteItem
 import com.jhorgi.cinematica.core.domain.model.Movie
@@ -16,31 +17,26 @@ import kotlinx.coroutines.flow.flowOn
 class MovieInteractor(private val movieRepository: IMovieRepository) : MovieUseCase {
 
     override fun getPopularMovie(): Flow<Resource<List<Movie>>> =movieRepository.getPopularMovie()
-    override fun getPopularMovieWithPaging(): Flow<PagingData<Movie>> = movieRepository.getPopularMovieWithPaging()
+    override fun moviePagingSource(argument: String): MoviePagingSource = movieRepository.moviePagingSource(argument= argument)
+    override fun tvSeriesPagingSource(argument: String): TvSeriesPagingSource = movieRepository.tvSeriesPagingSource(argument = argument)
 
     override fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = movieRepository.getTopRatedMovie()
-    override fun getTopRatedMovieWithPaging(): Flow<PagingData<Movie>>  = movieRepository.getTopRatedMovieWithPaging()
 
     override fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = movieRepository.getNowPlayingMovie()
-    override fun getNowPlayingMovieWithPaging(): Flow<PagingData<Movie>> = movieRepository.getNowPlayingMovieWithPaging()
 
     override fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = movieRepository.getPopularTvShow()
-    override fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>> = movieRepository.getPopularTvShowWithPaging()
 
     override fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = movieRepository.getTopRatedTvShows()
-    override fun getTopRatedTvShowsWithPaging(): Flow<PagingData<TvSeries>>  = movieRepository.getTopRatedTvShowsWithPaging()
 
     override fun movieSearch(query: String): Flow<Resource<List<Movie>>> = movieRepository.movieSearch(query)
     override fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>> = movieRepository.tvSeriesSearch(query)
 
     override fun getUpComingMovie(): Flow<Resource<List<Movie>>> = movieRepository.getUpComingMovie()
-    override fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>>  = movieRepository.getUpComingMovieWithPaging()
 
     override fun discoverMovie(): Flow<Resource<List<Movie>>> = movieRepository.discoverMovie()
-    override fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>> = movieRepository.getDiscoverMovieWithPaging()
 
     override fun discoverTvShow(): Flow<Resource<List<TvSeries>>> = movieRepository.discoverTvShow()
-    override fun getDiscoverTvSeriesWithPaging(): Flow<PagingData<TvSeries>> = movieRepository.getDiscoverTvSeriesWithPaging()
+
 
     override fun getMovieDetails(movieId: Int): Flow<MovieDetails> =
         movieRepository.getMovieDetails(movieId)

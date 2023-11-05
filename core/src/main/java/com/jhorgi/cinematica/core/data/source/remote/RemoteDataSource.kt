@@ -1,9 +1,6 @@
 package com.jhorgi.cinematica.core.data.source.remote
 
 import android.util.Log
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.jhorgi.cinematica.core.data.Resource
 import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource
 import com.jhorgi.cinematica.core.data.pagingDataSource.TvSeriesPagingSource
@@ -42,17 +39,9 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getPopularMovieWithPaging(): Flow<PagingData<Movie>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                MoviePagingSource(apiService, MoviePagingSource.ARG_POPULAR_MOVIE)
-            }
-        ).flow
-    }
+    fun moviePagingSource(argument: String) = MoviePagingSource(apiService, argument)
+
+    fun tvSeriesPagingSource(argument: String) = TvSeriesPagingSource(apiService, argument)
 
     fun getUpComingMovie(): Flow<Resource<List<Movie>>> = flow {
         try {
@@ -69,18 +58,6 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                MoviePagingSource(apiService, MoviePagingSource.ARG_UP_COMING_MOVIE)
-            }
-        ).flow
-
-    }
 
     fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = flow {
         try {
@@ -104,18 +81,6 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getTopRatedMovieWithPaging(): Flow<PagingData<Movie>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                MoviePagingSource(apiService, MoviePagingSource.ARG_TOP_RATED_MOVIE)
-            }
-        ).flow
-    }
-
     fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = flow {
         try {
 
@@ -136,17 +101,6 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getNowPlayingMovieWithPaging(): Flow<PagingData<Movie>>{
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                MoviePagingSource(apiService, MoviePagingSource.ARG_NOW_PLAYING_MOVIE)
-            }
-        ).flow
-    }
 
     fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = flow {
         try {
@@ -167,18 +121,6 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                TvSeriesPagingSource(apiService, TvSeriesPagingSource.ARG_POPULAR_TV_SERIES)
-            }
-        ).flow
-    }
-
     fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = flow {
         try {
 
@@ -196,18 +138,6 @@ class RemoteDataSource(private val apiService: ApiService) {
         } catch (e: Exception) {
             emit(Resource.Error(e.message.toString()))
         }
-    }
-
-    fun getTopRatedTvShowsWithPaging(): Flow<PagingData<TvSeries>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                TvSeriesPagingSource(apiService, TvSeriesPagingSource.ARG_TOP_RATED_TV_SERIES)
-            }
-        ).flow
     }
 
     fun getMovieDetails(movieId: Int): Flow<MovieDetails> = flow {
@@ -294,30 +224,6 @@ class RemoteDataSource(private val apiService: ApiService) {
         }
     }
 
-    fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                MoviePagingSource(apiService,MoviePagingSource.ARG_DISCOVER_MOVIE)
-            }
-        ).flow
-    }
-
-    fun getDiscoverTvSeriesWithPaging(): Flow<PagingData<TvSeries>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                TvSeriesPagingSource(apiService, TvSeriesPagingSource.ARG_DISCOVER_TV_SERIES)
-            }
-        ).flow
-    }
-
     fun discoverTvShow(): Flow<Resource<List<TvSeries>>> = flow {
         try {
 
@@ -375,7 +281,7 @@ class RemoteDataSource(private val apiService: ApiService) {
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
                 val roundedValue = "%.1f".format(it.voteAverage).toDouble()
-                DataMapper.mapTvShowSearchResponseToDomain(it, listOfGenre!!,roundedValue)
+                DataMapper.mapTvShowSearchResponseToDomain(it, listOfGenre!!, roundedValue)
             }
 
             emit(Resource.Success(response))

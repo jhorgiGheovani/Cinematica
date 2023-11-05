@@ -1,25 +1,91 @@
 package com.jhorgi.cinematica.seeAllPages
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource.Companion.ARG_DISCOVER_MOVIE
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource.Companion.ARG_NOW_PLAYING_MOVIE
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource.Companion.ARG_POPULAR_MOVIE
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource.Companion.ARG_TOP_RATED_MOVIE
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource.Companion.ARG_UP_COMING_MOVIE
+import com.jhorgi.cinematica.core.data.pagingDataSource.TvSeriesPagingSource.Companion.ARG_DISCOVER_TV_SERIES
+import com.jhorgi.cinematica.core.data.pagingDataSource.TvSeriesPagingSource.Companion.ARG_POPULAR_TV_SERIES
+import com.jhorgi.cinematica.core.data.pagingDataSource.TvSeriesPagingSource.Companion.ARG_TOP_RATED_TV_SERIES
+import com.jhorgi.cinematica.core.data.source.remote.NETWORK_PAGE_SIZE
 import com.jhorgi.cinematica.core.domain.usecase.MovieUseCase
 
 class SeeAllPagesViewModel(movieUseCase: MovieUseCase)  : ViewModel() {
 
-    val discoverMovie = movieUseCase.getDiscoverMovieWithPaging().cachedIn(viewModelScope)
+    val discoverTvSeries = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { movieUseCase.tvSeriesPagingSource(ARG_DISCOVER_TV_SERIES) }
 
-    val discoverTvSeries = movieUseCase.getDiscoverTvSeriesWithPaging().cachedIn(viewModelScope)
+    ).flow
 
-    val topRatedTvSeries = movieUseCase.getTopRatedTvShowsWithPaging().cachedIn(viewModelScope)
+    val topRatedTvSeries = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { movieUseCase.tvSeriesPagingSource(ARG_TOP_RATED_TV_SERIES) }
 
-    val popularMovie = movieUseCase.getPopularMovieWithPaging().cachedIn(viewModelScope)
+    ).flow
 
-    val popularTvShow = movieUseCase.getPopularTvShowWithPaging().cachedIn(viewModelScope)
+    val discoverMovie = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { movieUseCase.moviePagingSource(ARG_DISCOVER_MOVIE) }
 
-    val upcomingMovie = movieUseCase.getUpComingMovieWithPaging().cachedIn(viewModelScope)
+    ).flow
 
-    val topRatedMovie = movieUseCase.getTopRatedMovieWithPaging().cachedIn(viewModelScope)
+    val popularMovie = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { movieUseCase.moviePagingSource(ARG_POPULAR_MOVIE) }
 
-    val getNowPlayingMovie = movieUseCase.getNowPlayingMovieWithPaging().cachedIn(viewModelScope)
+    ).flow
+
+    val upcomingMovie = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { movieUseCase.moviePagingSource(ARG_UP_COMING_MOVIE) }
+
+    ).flow
+
+    val getNowPlayingMovie = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { movieUseCase.moviePagingSource(ARG_NOW_PLAYING_MOVIE) }
+
+    ).flow
+
+    val topRatedMovie = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { movieUseCase.moviePagingSource(ARG_TOP_RATED_MOVIE) }
+
+    ).flow
+
+    val popularTvShow = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { movieUseCase.tvSeriesPagingSource(ARG_POPULAR_TV_SERIES) }
+
+    ).flow
+
 }

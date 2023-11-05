@@ -67,11 +67,12 @@ class SeeAllContentFragment : Fragment() {
                 }
             }
             if(type == POPULAR){
-                viewLifecycleOwner.lifecycleScope.launch {
-                    seeAllPagesViewModel.popularMovie.collectLatest { resourcePagingData->
-                        moviePagingAdapter.submitData(resourcePagingData)
+                lifecycleScope.launch {
+                    seeAllPagesViewModel.popularMovie.collectLatest { resources->
+                        moviePagingAdapter.submitData(resources)
                     }
                 }
+
             }
 
             if(type == UPCOMING){

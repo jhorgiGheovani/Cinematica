@@ -1,6 +1,7 @@
 package com.jhorgi.cinematica.core.data
 
-import androidx.paging.PagingData
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource
+import com.jhorgi.cinematica.core.data.pagingDataSource.TvSeriesPagingSource
 import com.jhorgi.cinematica.core.data.source.local.LocalDataSource
 import com.jhorgi.cinematica.core.data.source.remote.RemoteDataSource
 import com.jhorgi.cinematica.core.domain.model.Credit
@@ -17,33 +18,25 @@ class MovieRepository(
     private val remoteDataSource: RemoteDataSource,
 ) : IMovieRepository {
     override fun getPopularMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getPopularMovie()
-    override fun getPopularMovieWithPaging(): Flow<PagingData<Movie>> = remoteDataSource.getPopularMovieWithPaging()
+    override fun moviePagingSource(argument: String): MoviePagingSource = remoteDataSource.moviePagingSource(argument = argument)
+    override fun tvSeriesPagingSource(argument: String): TvSeriesPagingSource  = remoteDataSource.tvSeriesPagingSource(argument = argument)
 
     override fun getTopRatedMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getTopRatedMovie()
-    override fun getTopRatedMovieWithPaging(): Flow<PagingData<Movie>> = remoteDataSource.getTopRatedMovieWithPaging()
 
     override fun getNowPlayingMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getNowPlayingMovie()
-    override fun getNowPlayingMovieWithPaging(): Flow<PagingData<Movie>>  = remoteDataSource.getNowPlayingMovieWithPaging()
 
     override fun getPopularTvShow(): Flow<Resource<List<TvSeries>>> = remoteDataSource.getPopularTvShow()
-    override fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>> = remoteDataSource.getPopularTvShowWithPaging()
 
     override fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>> = remoteDataSource.getTopRatedTvShows()
-    override fun getTopRatedTvShowsWithPaging(): Flow<PagingData<TvSeries>>  = remoteDataSource.getTopRatedTvShowsWithPaging()
     override fun movieSearch(query: String): Flow<Resource<List<Movie>>> = remoteDataSource.movieSearch(query)
     override fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>> = remoteDataSource.tvSeriesSearch(query)
 
     override fun getUpComingMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.getUpComingMovie()
-    override fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>>  = remoteDataSource.getUpComingMovieWithPaging()
 
     override fun discoverMovie(): Flow<Resource<List<Movie>>> = remoteDataSource.discoverMovie()
-    override fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>> =
-        remoteDataSource.getDiscoverMovieWithPaging()
 
     override fun discoverTvShow(): Flow<Resource<List<TvSeries>>> = remoteDataSource.discoverTvShow()
 
-    override fun getDiscoverTvSeriesWithPaging(): Flow<PagingData<TvSeries>> =
-        remoteDataSource.getDiscoverTvSeriesWithPaging()
 
     override fun getMovieDetails(movie_id: Int): Flow<MovieDetails> =
         remoteDataSource.getMovieDetails(movie_id)

@@ -1,7 +1,8 @@
 package com.jhorgi.cinematica.core.domain.usecase
 
-import androidx.paging.PagingData
 import com.jhorgi.cinematica.core.data.Resource
+import com.jhorgi.cinematica.core.data.pagingDataSource.MoviePagingSource
+import com.jhorgi.cinematica.core.data.pagingDataSource.TvSeriesPagingSource
 import com.jhorgi.cinematica.core.domain.model.Credit
 import com.jhorgi.cinematica.core.domain.model.FavoriteItem
 import com.jhorgi.cinematica.core.domain.model.Movie
@@ -14,35 +15,30 @@ interface MovieUseCase {
 
     fun getPopularMovie(): Flow<Resource<List<Movie>>>
 
-    fun getPopularMovieWithPaging(): Flow<PagingData<Movie>>
+    fun moviePagingSource(argument: String): MoviePagingSource
+
+    fun tvSeriesPagingSource(argument: String): TvSeriesPagingSource
 
     fun getTopRatedMovie(): Flow<Resource<List<Movie>>>
 
-    fun getTopRatedMovieWithPaging(): Flow<PagingData<Movie>>
     fun getNowPlayingMovie(): Flow<Resource<List<Movie>>>
 
-    fun getNowPlayingMovieWithPaging(): Flow<PagingData<Movie>>
     fun getPopularTvShow(): Flow<Resource<List<TvSeries>>>
 
-    fun getPopularTvShowWithPaging(): Flow<PagingData<TvSeries>>
 
     fun getTopRatedTvShows(): Flow<Resource<List<TvSeries>>>
 
-    fun getTopRatedTvShowsWithPaging(): Flow<PagingData<TvSeries>>
     fun movieSearch(query:String): Flow<Resource<List<Movie>>>
 
     fun tvSeriesSearch(query: String): Flow<Resource<List<TvSeries>>>
 
     fun getUpComingMovie(): Flow<Resource<List<Movie>>>
 
-    fun getUpComingMovieWithPaging(): Flow<PagingData<Movie>>
     fun discoverMovie(): Flow<Resource<List<Movie>>>
 
-    fun getDiscoverMovieWithPaging(): Flow<PagingData<Movie>>
 
     fun discoverTvShow(): Flow<Resource<List<TvSeries>>>
 
-    fun getDiscoverTvSeriesWithPaging(): Flow<PagingData<TvSeries>>
     fun getMovieDetails(movieId: Int) : Flow<MovieDetails>
 
     fun getTvSeriesDetails(seriesId: Int) : Flow<TvSeriesDetails>
