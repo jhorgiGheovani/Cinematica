@@ -1,7 +1,6 @@
 package com.jhorgi.cinematica.core.di
 
 import androidx.room.Room
-import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jhorgi.cinematica.core.data.MovieRepository
 import com.jhorgi.cinematica.core.data.source.local.LocalDataSource
 import com.jhorgi.cinematica.core.data.source.local.room.MovieDatabase
@@ -28,7 +27,7 @@ val databaseModule = module {
             androidContext(),
             MovieDatabase::class.java, "FavoriteItems.db"
         ).fallbackToDestructiveMigration()
-//            .openHelperFactory(factory) //enkripsi local database
+            .openHelperFactory(factory) //enkripsi local database
             .build()
     }
 }
@@ -57,7 +56,7 @@ val networkModule = module {
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .certificatePinner(certificatePinner)
-            .addInterceptor(ChuckerInterceptor(androidContext()))
+//            .addInterceptor(ChuckerInterceptor(androidContext()))
             .build()
     }
 

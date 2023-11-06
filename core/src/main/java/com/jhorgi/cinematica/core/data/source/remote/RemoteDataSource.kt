@@ -126,7 +126,7 @@ class RemoteDataSource(private val apiService: ApiService) {
 
             val genre = apiService.tvListGenres().genres
             val idToMap = genre.associateBy { it.id }
-            val response = apiService.getPopularTvShow().results.map { data ->
+            val response = apiService.getTopRatedTvShows().results.map { data ->
                 val listOfGenre = data.genreIds?.mapNotNull { id ->
                     idToMap[id]?.name  //3. map the List<Id> to id key
                 }
@@ -146,7 +146,7 @@ class RemoteDataSource(private val apiService: ApiService) {
             val movieDetails = DataMapper.mapMovieDetailsResponseToMovieDetails(response)
             emit(movieDetails)
         } catch (e: Exception) {
-            Log.d("Error getMovieDetails", e.message.toString())
+//            Log.d("Error getMovieDetails", e.message.toString())
         }
     }
 
@@ -157,7 +157,7 @@ class RemoteDataSource(private val apiService: ApiService) {
 
             emit(tvSeriesDetails)
         } catch (e: Exception) {
-            Log.d("Error getTvSeriesDetails", e.message.toString())
+//            Log.d("Error getTvSeriesDetails", e.message.toString())
         }
     }
 
@@ -186,10 +186,8 @@ class RemoteDataSource(private val apiService: ApiService) {
         try {
             val response = apiService.getSeriesCredits(seriesId)
             val cast = DataMapper.mapCreditsResponseToCastCreditModel(response)
-            Log.d("credits getTvCast", cast.toString())
             emit(cast)
         } catch (e: Exception) {
-            Log.d("Error getTvCast", e.message.toString())
         }
     }
 
@@ -200,7 +198,7 @@ class RemoteDataSource(private val apiService: ApiService) {
             emit(crewList)
 
         } catch (e: Exception) {
-            Log.d("Error getTvCrews", e.message.toString())
+//            Log.d("Error getTvCrews", e.message.toString())
         }
     }
 
@@ -241,7 +239,6 @@ class RemoteDataSource(private val apiService: ApiService) {
             emit(Resource.Success(response))
         } catch (e: Exception) {
             emit(Resource.Error(e.message.toString()))
-            Log.d("Error RemoteDatasource discoverTvShow", e.message.toString())
         }
     }
 
