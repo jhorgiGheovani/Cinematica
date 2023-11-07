@@ -74,7 +74,7 @@ object DataMapper {
         backdropPath = input.backdropPath,
         releaseDate = input.releaseDate,
         genres = genre,
-        rating = input.voteAverage
+        rating = roundToOneDecimalPlace(input.voteAverage)
     )
     fun mapMovieSearchToDomain(input: ResultsItem, genre: List<String>, rating: Double) = Movie(
         movieId = input.id,
@@ -99,7 +99,7 @@ object DataMapper {
         backdropPath = input.backdropPath,
         firstAirDate = input.firstAirDate,
         genres = genre,
-        voteAverage = input.voteAverage
+        voteAverage = input.voteAverage?.let { roundToOneDecimalPlace(it) }
     )
 
     fun mapTvShowSearchResponseToDomain(input: TvResults, genre: List<String>, rating: Double) = TvSeries(
@@ -240,4 +240,7 @@ object DataMapper {
 
         }
 
+    private fun roundToOneDecimalPlace(number: Double): Double {
+        return Math.round(number * 10.0) / 10.0
+    }
 }

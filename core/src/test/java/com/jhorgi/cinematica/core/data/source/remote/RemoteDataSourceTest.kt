@@ -81,6 +81,7 @@ class RemoteDataSourceTest {
                         DataDummy.dummyListMovieData()[0].title,
                         actualResult.data[0].title
                     )
+                    println(actualResult.data[0].rating)
                 }
 
                 is Resource.Error -> {}
@@ -88,7 +89,6 @@ class RemoteDataSourceTest {
         }
 
     }
-
     @Test
     fun `Test Get Popular Movie Failed Response`() = runTest {
         `when`(apiService.getPopularMovie()).then { throw Exception(ERROR_MESSAGE_API) }

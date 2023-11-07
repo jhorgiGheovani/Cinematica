@@ -27,7 +27,7 @@ val databaseModule = module {
             androidContext(),
             MovieDatabase::class.java, "FavoriteItems.db"
         ).fallbackToDestructiveMigration()
-            .openHelperFactory(factory) //enkripsi local database
+//            .openHelperFactory(factory) //enkripsi local database
             .build()
     }
 }

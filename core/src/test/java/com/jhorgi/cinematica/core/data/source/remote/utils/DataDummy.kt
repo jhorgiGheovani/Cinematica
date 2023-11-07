@@ -43,7 +43,7 @@ object DataDummy {
                 backdropPath = "backdropPath $i",
                 releaseDate = "releaseDate $i",
                 popularity = 3.43,
-                voteAverage = 3.21,
+                voteAverage = 3.2699,
                 id = i,
                 adult = true,
                 voteCount = i
